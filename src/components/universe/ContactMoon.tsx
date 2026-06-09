@@ -14,6 +14,11 @@ export default function ContactMoon() {
       (state) => state.setSelectedDestination
     );
 
+  const setCameraTarget =
+    useNavigationStore(
+      (state) => state.setCameraTarget
+    );
+
   const selectedDestination =
     useNavigationStore(
       (state) => state.selectedDestination
@@ -34,9 +39,10 @@ export default function ContactMoon() {
         onPointerOut={() =>
           setHoveredDestination(null)
         }
-        onClick={() =>
-          setSelectedDestination("contact")
-        }
+        onClick={() => {
+          setSelectedDestination("contact");
+          setCameraTarget([0, -8, -8]);
+        }}
       >
         <sphereGeometry args={[0.7, 64, 64]} />
 

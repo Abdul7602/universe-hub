@@ -14,6 +14,11 @@ export default function ProjectsPlanet() {
       (state) => state.setSelectedDestination
     );
 
+  const setCameraTarget =
+    useNavigationStore(
+      (state) => state.setCameraTarget
+    );
+
   const selectedDestination =
     useNavigationStore(
       (state) => state.selectedDestination
@@ -34,9 +39,10 @@ export default function ProjectsPlanet() {
         onPointerOut={() =>
           setHoveredDestination(null)
         }
-        onClick={() =>
-          setSelectedDestination("projects")
-        }
+        onClick={() => {
+          setSelectedDestination("projects");
+          setCameraTarget([-12, 2, -4]);
+        }}
       >
         <sphereGeometry args={[1.2, 64, 64]} />
 

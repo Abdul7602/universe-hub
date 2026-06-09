@@ -14,6 +14,11 @@ export default function LinkedInGalaxy() {
       (state) => state.setSelectedDestination
     );
 
+  const setCameraTarget =
+    useNavigationStore(
+      (state) => state.setCameraTarget
+    );
+
   const selectedDestination =
     useNavigationStore(
       (state) => state.selectedDestination
@@ -34,9 +39,10 @@ export default function LinkedInGalaxy() {
         onPointerOut={() =>
           setHoveredDestination(null)
         }
-        onClick={() =>
-          setSelectedDestination("linkedin")
-        }
+        onClick={() => {
+          setSelectedDestination("linkedin");
+          setCameraTarget([0, 8, -8]);
+        }}
       >
         <icosahedronGeometry args={[0.9, 0]} />
 

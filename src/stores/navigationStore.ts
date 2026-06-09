@@ -1,8 +1,11 @@
 import { create } from "zustand";
 
+type Vector3 = [number, number, number];
+
 type NavigationStore = {
   selectedDestination: string | null;
   hoveredDestination: string | null;
+  cameraTarget: Vector3 | null;
 
   setSelectedDestination: (
     destination: string | null
@@ -11,12 +14,17 @@ type NavigationStore = {
   setHoveredDestination: (
     destination: string | null
   ) => void;
+
+  setCameraTarget: (
+    target: Vector3 | null
+  ) => void;
 };
 
 export const useNavigationStore =
   create<NavigationStore>((set) => ({
     selectedDestination: null,
     hoveredDestination: null,
+    cameraTarget: null,
 
     setSelectedDestination: (
       destination
@@ -30,5 +38,12 @@ export const useNavigationStore =
     ) =>
       set({
         hoveredDestination: destination,
+      }),
+
+    setCameraTarget: (
+      target
+    ) =>
+      set({
+        cameraTarget: target,
       }),
   }));

@@ -14,6 +14,11 @@ export default function GitHubStation() {
       (state) => state.setSelectedDestination
     );
 
+  const setCameraTarget =
+    useNavigationStore(
+      (state) => state.setCameraTarget
+    );
+
   const selectedDestination =
     useNavigationStore(
       (state) => state.selectedDestination
@@ -34,9 +39,10 @@ export default function GitHubStation() {
         onPointerOut={() =>
           setHoveredDestination(null)
         }
-        onClick={() =>
-          setSelectedDestination("github")
-        }
+        onClick={() => {
+          setSelectedDestination("github");
+          setCameraTarget([10, 0, -2]);
+        }}
       >
         <octahedronGeometry args={[0.8, 0]} />
 
