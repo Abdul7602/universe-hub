@@ -1,67 +1,147 @@
 "use client";
 
 import { useNavigationStore } from "@/stores/navigationStore";
+import { destinationContent } from "@/data/destinationContent";
+import { links } from "@/data/links";
+import { timeline } from "@/data/timeline/timeline";
+import { skills } from "@/data/skills/skills";
 
 export default function DestinationPanel() {
-  const selectedDestination =
-    useNavigationStore(
-      (state) => state.selectedDestination
-    );
+const selectedDestination = useNavigationStore(
+(state) => state.selectedDestination
+);
 
-  if (!selectedDestination) return null;
+if (!selectedDestination) return null;
 
-  const content = {
-    github: {
-      title: "GitHub Station",
-      description:
-        "Explore repositories, codebases, and open-source work.",
-    },
+const current =
+destinationContent[
+selectedDestination as keyof typeof destinationContent
+];
 
-    projects: {
-      title: "Projects Planet",
-      description:
-        "Browse featured projects, demos, and case studies.",
-    },
+let actionLink = "";
+let actionText = "";
 
-    career: {
-      title: "Career Galaxy",
-      description:
-        "View experience, skills, certifications, and resume.",
-    },
+switch (selectedDestination) {
+case "github":
+actionLink = links.github;
+actionText = "Open GitHub";
+break;
 
-    contact: {
-      title: "Contact Moon",
-      description:
-        "Get in touch through email, social platforms, and future contact portals.",
-    },
-  };
 
-  const current =
-    content[
-      selectedDestination as keyof typeof content
-    ];
+case "projects":
+  actionLink = links.portfolio;
+  actionText = "Open Portfolio";
+  break;
 
-  return (
-    <div
-      style={{
-        position: "fixed",
-        top: "50%",
-        right: "40px",
-        transform: "translateY(-50%)",
-        width: "320px",
-        padding: "24px",
-        background: "rgba(0,0,0,0.8)",
-        border:
-          "1px solid rgba(255,255,255,0.2)",
-        borderRadius: "16px",
-        color: "white",
-        backdropFilter: "blur(10px)",
-        zIndex: 9999,
-      }}
-    >
-      <h2>{current.title}</h2>
+case "career":
+  actionLink = links.linkedin;
+  actionText = "Open LinkedIn";
+  break;
 
-      <p>{current.description}</p>
-    </div>
-  );
+case "contact":
+  actionLink = links.email;
+  actionText = "Send Email";
+  break;
+
+
+}
+
+return (
+<div
+style={{
+position: "fixed",
+top: "50%",
+right: "40px",
+transform: "translateY(-50%)",
+width: "320px",
+maxHeight: "70vh",
+overflowY: "auto",
+padding: "24px",
+background: "rgba(0,0,0,0.8)",
+border: "1px solid rgba(255,255,255,0.2)",
+borderRadius: "16px",
+color: "white",
+backdropFilter: "blur(10px)",
+zIndex: 9999,
+}}
+> 
+  <h2
+  style={{
+    marginBottom: "12px",
+  }}
+>
+  {current.title}
+  </h2>
+
+  <p>{current.description}</p>
+
+  <a
+    href={actionLink}
+    target="_blank"
+    rel="noreferrer"
+    style={{
+      display: "inline-block",
+      marginTop: "16px",
+      padding: "10px 16px",
+      background: "#ffffff",
+      color: "#000000",
+      borderRadius: "8px",
+      textDecoration: "none",
+      fontWeight: 600,
+    }}
+  >
+    {actionText}
+  </a>
+
+  {selectedDestination === "career" && (
+    <>
+      <div style={{ marginTop: "24px" }}>
+        <h3>Skills</h3>
+
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "8px",
+            marginTop: "12px",
+          }}
+        >
+          {skills.map((skill) => (
+            <span
+              key={skill}
+              style={{
+                padding: "6px 10px",
+                border:
+                  "1px solid rgba(255,255,255,0.2)",
+                borderRadius: "999px",
+                fontSize: "12px",
+              }}
+            >
+              {skill}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ marginTop: "24px" }}>
+        <h3>Timeline</h3>
+
+        {timeline.map((item) => (
+          <div
+            key={item.year + item.title}
+            style={{ marginBottom: "16px" }}
+          >
+            <strong>{item.year}</strong>
+
+            <div>{item.title}</div>
+
+            <small>{item.description}</small>
+          </div>
+        ))}
+      </div>
+    </>
+  )}
+</div>
+
+);
 }

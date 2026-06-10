@@ -12,8 +12,8 @@ export const destinations = [
   },
 
   {
-    id: "linkedin",
-    name: "LinkedIn Galaxy",
+    id: "career",
+    name: "Career Galaxy",
     position: [0, 8, -8],
   },
 
