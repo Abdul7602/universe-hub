@@ -3,7 +3,7 @@
 import { useNavigationStore } from "@/stores/navigationStore";
 import DestinationLabel from "./DestinationLabel";
 
-export default function LinkedInGalaxy() {
+export default function CareerGalaxy() {
   const setHoveredDestination =
     useNavigationStore(
       (state) => state.setHoveredDestination
@@ -25,7 +25,7 @@ export default function LinkedInGalaxy() {
     );
 
   const isSelected =
-    selectedDestination === "linkedin";
+    selectedDestination === "career";
 
   return (
     <group
@@ -34,13 +34,13 @@ export default function LinkedInGalaxy() {
     >
       <mesh
         onPointerOver={() =>
-          setHoveredDestination("linkedin")
+          setHoveredDestination("career")
         }
         onPointerOut={() =>
           setHoveredDestination(null)
         }
         onClick={() => {
-          setSelectedDestination("linkedin");
+          setSelectedDestination("career");
           setCameraTarget([0, 8, -8]);
         }}
       >
@@ -56,7 +56,7 @@ export default function LinkedInGalaxy() {
       </mesh>
 
       <DestinationLabel
-        text="LinkedIn"
+        text="Career"
         position={[0, 1.8, 0]}
       />
     </group>

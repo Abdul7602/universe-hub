@@ -8,7 +8,7 @@ import Satellite from "./Satellite";
 
 import GitHubStation from "./GitHubStation";
 import ProjectsPlanet from "./ProjectsPlanet";
-import LinkedInGalaxy from "./LinkedInGalaxy";
+import CareerGalaxy from "./CareerGalaxy";
 import ContactMoon from "./ContactMoon";
 
 export default function SceneManager() {
@@ -24,7 +24,7 @@ export default function SceneManager() {
 
       <GitHubStation />
       <ProjectsPlanet />
-      <LinkedInGalaxy />
+      <CareerGalaxy />
       <ContactMoon />
     </>
   );
