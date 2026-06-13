@@ -2,6 +2,7 @@
 
 import { useNavigationStore } from "@/stores/navigationStore";
 import DestinationLabel from "./DestinationLabel";
+import DNAHelix from "./DNAHelix";
 
 export default function CareerGalaxy() {
   const setHoveredDestination =
@@ -54,6 +55,10 @@ export default function CareerGalaxy() {
           }
         />
       </mesh>
+
+      <group position={[0, 2.2, 0]}>
+        <DNAHelix />
+      </group>
 
       <DestinationLabel
         text="Career"
