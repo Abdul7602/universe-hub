@@ -3,71 +3,71 @@
 export default function DNALinks() {
   return (
     <>
-      {/* Top -> Left */}
+      {/* TOP */}
 
       <div
         style={{
           position: "absolute",
-          left: "340px",
-          top: "160px",
-          width: "180px",
-          height: "2px",
+          left: "50%",
+          top: "130px",
+          width: "2px",
+          height: "120px",
           background:
-            "linear-gradient(to right, transparent, #66e0ff, transparent)",
-          transform: "rotate(35deg)",
+            "linear-gradient(#66e0ff, transparent)",
+          transform:
+            "translateX(-50%)",
           boxShadow:
-            "0 0 12px #66e0ff",
+            "0 0 20px #66e0ff",
         }}
       />
 
-      {/* Top -> Right */}
+      {/* LEFT */}
 
       <div
         style={{
           position: "absolute",
-          right: "340px",
-          top: "160px",
-          width: "180px",
+          left: "350px",
+          top: "350px",
+          width: "220px",
           height: "2px",
           background:
-            "linear-gradient(to right, transparent, #66e0ff, transparent)",
-          transform: "rotate(-35deg)",
+            "linear-gradient(to right, #66e0ff, transparent)",
           boxShadow:
-            "0 0 12px #66e0ff",
+            "0 0 20px #66e0ff",
         }}
       />
 
-      {/* Left -> Bottom */}
+      {/* RIGHT */}
 
       <div
         style={{
           position: "absolute",
-          left: "340px",
-          top: "470px",
-          width: "180px",
+          right: "350px",
+          top: "350px",
+          width: "220px",
           height: "2px",
           background:
-            "linear-gradient(to right, transparent, #66e0ff, transparent)",
-          transform: "rotate(-35deg)",
+            "linear-gradient(to left, #66e0ff, transparent)",
           boxShadow:
-            "0 0 12px #66e0ff",
+            "0 0 20px #66e0ff",
         }}
       />
 
-      {/* Right -> Bottom */}
+      {/* BOTTOM */}
 
       <div
         style={{
           position: "absolute",
-          right: "340px",
-          top: "470px",
-          width: "180px",
-          height: "2px",
+          left: "50%",
+          bottom: "130px",
+          width: "2px",
+          height: "120px",
           background:
-            "linear-gradient(to right, transparent, #66e0ff, transparent)",
-          transform: "rotate(35deg)",
+            "linear-gradient(transparent, #66e0ff)",
+          transform:
+            "translateX(-50%)",
           boxShadow:
-            "0 0 12px #66e0ff",
+            "0 0 20px #66e0ff",
         }}
       />
     </>

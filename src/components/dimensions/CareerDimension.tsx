@@ -1,18 +1,26 @@
 "use client";
 
 import { useNavigationStore } from "@/stores/navigationStore";
+import { useCareerStore } from "@/stores/careerStore";
+
 import ExperienceNode from "./ExperienceNode";
-import CareerDNA from "./CareerDNA";
+import CareerDNAModel from "./CareerDNAModel";
+import CareerOrbit from "./CareerOrbit";
 import DNAOrbit from "./DNAOrbit";
 import DNALinks from "./DNALinks";
 import DNAEnergy from "./DNAEnergy";
-import NodePanel from "./NodePanel";
-import { useCareerStore } from "@/stores/careerStore";
+import MemoryBackdrop from "./MemoryBackdrop";
+import MemoryModal from "./MemoryModal";
 
 export default function CareerDimension() {
   const setActiveDimension =
     useNavigationStore(
       (state) => state.setActiveDimension
+    );
+
+  const selectedYear =
+    useCareerStore(
+      (state) => state.selectedYear
     );
 
   return (
@@ -72,8 +80,6 @@ export default function CareerDimension() {
           Professional Journey Timeline
         </p>
 
-        <CareerDNA />
-
         <div
           style={{
             position: "relative",
@@ -81,78 +87,72 @@ export default function CareerDimension() {
             marginTop: "40px",
           }}
         >
-	  <DNAOrbit />
-	  <DNALinks />
-	  <DNAEnergy />
+          <CareerDNAModel />
 
-	  <NodePanel />
+          <DNAOrbit />
+
+          <DNALinks />
+
+          <DNAEnergy />
+
+          {selectedYear && (
+            <>
+              <MemoryBackdrop />
+              <MemoryModal />
+            </>
+          )}
+
           {/* TOP NODE */}
 
-          <div
-            style={{
-              position: "absolute",
-              left: "50%",
-              top: "0",
-              transform:
-                "translateX(-50%)",
-              width: "280px",
-            }}
+          <CareerOrbit
+            radius={280}
+            speed={0.002}
+            startAngle={-1.57}
           >
             <ExperienceNode
               year="2025"
               title="Universe Hub Development"
             />
-          </div>
+          </CareerOrbit>
 
           {/* LEFT NODE */}
 
-          <div
-            style={{
-              position: "absolute",
-              left: "120px",
-              top: "250px",
-              width: "280px",
-            }}
+          <CareerOrbit
+            radius={280}
+            speed={0.002}
+            startAngle={3.14}
           >
             <ExperienceNode
               year="2024"
               title="Full Stack Projects & Portfolio Work"
             />
-          </div>
+          </CareerOrbit>
 
           {/* RIGHT NODE */}
 
-          <div
-            style={{
-              position: "absolute",
-              right: "120px",
-              top: "250px",
-              width: "280px",
-            }}
+          <CareerOrbit
+            radius={280}
+            speed={0.002}
+            startAngle={0}
           >
             <ExperienceNode
               year="2023"
               title="Learning and Career Growth"
             />
-          </div>
+          </CareerOrbit>
 
           {/* BOTTOM NODE */}
 
-          <div
-            style={{
-              position: "absolute",
-              left: "50%",
-              bottom: "0",
-              transform:
-                "translateX(-50%)",
-              width: "280px",
-            }}
+          <CareerOrbit
+            radius={280}
+            speed={0.002}
+            startAngle={1.57}
           >
             <ExperienceNode
               year="2022"
               title="Beginning The Journey"
             />
-          </div>
+          </CareerOrbit>
         </div>
       </div>
     </div>

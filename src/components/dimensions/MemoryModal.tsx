@@ -3,7 +3,7 @@
 import { useCareerStore } from "@/stores/careerStore";
 import { careerData } from "@/data/careerData";
 
-export default function NodePanel() {
+export default function MemoryModal() {
   const selectedYear =
     useCareerStore(
       (state) => state.selectedYear
@@ -25,19 +25,19 @@ export default function NodePanel() {
     <>
       <style>
         {`
-          @keyframes panelEnter {
+          @keyframes openMemory {
             from {
               opacity: 0;
               transform:
-                translateY(-50%)
-                translateX(40px);
+                translate(-50%, -50%)
+                scale(0.9);
             }
 
             to {
               opacity: 1;
               transform:
-                translateY(-50%)
-                translateX(0px);
+                translate(-50%, -50%)
+                scale(1);
             }
           }
         `}
@@ -46,82 +46,107 @@ export default function NodePanel() {
       <div
         style={{
           position: "fixed",
-          right: "40px",
+          left: "50%",
           top: "50%",
-          transform: "translateY(-50%)",
-          animation:
-            "panelEnter 0.4s ease-out",
-          width: "340px",
-          padding: "24px",
-          borderRadius: "16px",
+
+          transform:
+            "translate(-50%, -50%)",
+
+          width: "700px",
+
+          maxWidth: "90vw",
+
+          maxHeight: "80vh",
+
+          overflowY: "auto",
+
+          padding: "40px",
+
+          borderRadius: "24px",
+
           background:
-            "rgba(10,15,30,0.95)",
+            "rgba(8,12,24,0.95)",
+
           border:
             "1px solid rgba(102,224,255,0.3)",
-          backdropFilter: "blur(12px)",
+
+          backdropFilter:
+            "blur(20px)",
+
           boxShadow:
-            "0 0 40px rgba(102,224,255,0.15)",
+            "0 0 60px rgba(102,224,255,0.15)",
+
+          animation:
+            "openMemory 0.4s ease-out",
+
+          zIndex: 100001,
+
           color: "white",
-          zIndex: 100000,
         }}
       >
         <button
           onClick={clearNode}
           style={{
             position: "absolute",
-            top: "12px",
-            right: "12px",
-            width: "32px",
-            height: "32px",
+            top: "20px",
+            right: "20px",
+
             border: "none",
-            borderRadius: "50%",
-            cursor: "pointer",
-            background:
-              "rgba(255,255,255,0.08)",
+
+            background: "none",
+
             color: "white",
-            fontSize: "18px",
+
+            cursor: "pointer",
+
+            fontSize: "24px",
           }}
         >
           ×
         </button>
 
-        <h2
+        <h1
           style={{
             color: "#66e0ff",
             marginBottom: "8px",
-            textShadow:
-              "0 0 20px #66e0ff",
           }}
         >
           {selectedYear}
-        </h2>
+        </h1>
 
-        <h3
+        <h2
           style={{
-            marginBottom: "16px",
+            marginBottom: "24px",
           }}
         >
           {current.title}
-        </h3>
+        </h2>
 
         <p
           style={{
             opacity: 0.85,
-            marginBottom: "24px",
+            lineHeight: 1.8,
+            marginBottom: "32px",
           }}
         >
           {current.description}
         </p>
 
-        <h4>Technologies</h4>
+        <h3
+          style={{
+            color: "#66e0ff",
+            marginBottom: "12px",
+          }}
+        >
+          Technologies
+        </h3>
 
         <div
           style={{
             display: "flex",
             flexWrap: "wrap",
             gap: "8px",
-            marginTop: "12px",
-            marginBottom: "24px",
+            marginBottom: "32px",
           }}
         >
           {current.technologies.map(
@@ -130,11 +155,17 @@ export default function NodePanel() {
                 key={tech}
                 style={{
                   padding:
-                    "6px 10px",
+                    "6px 12px",
+
                   border:
                     "1px solid rgba(255,255,255,0.2)",
+
                   borderRadius:
                     "999px",
+
+                  background:
+                    "rgba(255,255,255,0.05)",
+
                   fontSize: "12px",
                 }}
               >
@@ -144,12 +175,18 @@ export default function NodePanel() {
           )}
         </div>
 
-        <h4>Achievements</h4>
+        <h3
+          style={{
+            color: "#66e0ff",
+            marginBottom: "12px",
+          }}
+        >
+          Achievements
+        </h3>
 
         <ul
           style={{
-            marginTop: "12px",
-            paddingLeft: "18px",
+            paddingLeft: "20px",
             opacity: 0.9,
           }}
         >
@@ -158,7 +195,8 @@ export default function NodePanel() {
               <li
                 key={achievement}
                 style={{
-                  marginBottom: "8px",
+                  marginBottom: "10px",
+                  lineHeight: 1.6,
                 }}
               >
                 {achievement}
