@@ -11,6 +11,7 @@ import DNALinks from "./DNALinks";
 import DNAEnergy from "./DNAEnergy";
 import MemoryBackdrop from "./MemoryBackdrop";
 import MemoryModal from "./MemoryModal";
+import MemoryPulse from "./MemoryPulse";
 
 export default function CareerDimension() {
   const setActiveDimension =
@@ -88,6 +89,8 @@ export default function CareerDimension() {
           }}
         >
           <CareerDNAModel />
+
+	  <MemoryPulse />
 
           <DNAOrbit />
 

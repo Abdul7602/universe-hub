@@ -7,6 +7,8 @@ type CareerStore = {
   selectedTitle: string | null;
   selectedColor: string | null;
 
+  pulseTrigger: number;
+
   setNode: (
     year: string,
     title: string,
@@ -22,16 +24,21 @@ export const useCareerStore =
     selectedTitle: null,
     selectedColor: null,
 
+    pulseTrigger: 0,
+
     setNode: (
       year,
       title,
       color
     ) =>
-      set({
+      set((state) => ({
         selectedYear: year,
         selectedTitle: title,
         selectedColor: color,
-      }),
+
+        pulseTrigger:
+          state.pulseTrigger + 1,
+      })),
 
     clearNode: () =>
       set({
