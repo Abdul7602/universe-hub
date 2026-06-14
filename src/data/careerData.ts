@@ -5,7 +5,7 @@ export const careerData = {
     color: "#66e0ff",
 
     description:
-      "Building an interactive 3D portfolio universe inside an artificial brain (mind) using React Three Fiber and Next.js and ChatGPT based on GPT-5.5",
+      "Building an interactive 3D portfolio universe inside an artificial brain (mind) using React Three Fiber and Next.js.",
 
     technologies: [
       "Next.js",

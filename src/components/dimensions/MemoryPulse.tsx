@@ -26,7 +26,7 @@ export default function MemoryPulse() {
     const timeout =
       setTimeout(() => {
         setVisible(false);
-      }, 900);
+      }, 1800);
 
     return () =>
       clearTimeout(timeout);
@@ -38,57 +38,62 @@ export default function MemoryPulse() {
     <>
       <style>
         {`
-          @keyframes memoryBeam {
+          @keyframes streamToCore {
             0% {
               opacity: 0;
               transform:
-                translate(-50%, -50%)
-                scaleY(0);
+                translateY(0px)
+                scale(0.3);
             }
 
-            30% {
+            20% {
               opacity: 1;
             }
 
             100% {
               opacity: 0;
               transform:
-                translate(-50%, -50%)
-                scaleY(1);
+                translateY(-220px)
+                scale(1);
             }
           }
         `}
       </style>
 
-      <div
-        style={{
-          position: "absolute",
+      {[0, 1, 2, 3, 4, 5].map(
+        (particle) => (
+          <div
+            key={particle}
+            style={{
+              position:
+                "absolute",
 
-          left: "50%",
-          top: "50%",
+              left: "50%",
+              top: "50%",
 
-          width: "6px",
-          height: "320px",
+              width: "10px",
+              height: "10px",
 
-          background:
-            `linear-gradient(
-              transparent,
-              ${color},
-              transparent
-            )`,
+              borderRadius:
+                "50%",
 
-          transform:
-            "translate(-50%, -50%)",
+              background:
+                color,
 
-          boxShadow:
-            `0 0 30px ${color}`,
+              boxShadow:
+                `0 0 20px ${color}`,
 
-          animation:
-            "memoryBeam 0.9s ease-out",
+              transform:
+                "translate(-50%, -50%)",
 
-          zIndex: 15,
-        }}
-      />
+              animation:
+                `streamToCore 1.6s ease-out ${particle * 0.15}s forwards`,
+
+              zIndex: 25,
+            }}
+          />
+        )
+      )}
     </>
   );
 }
