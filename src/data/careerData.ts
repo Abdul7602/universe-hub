@@ -4,6 +4,12 @@ export const careerData = {
 
     color: "#66e0ff",
 
+    dependsOn: [
+      "2024",
+      "2023",
+      "2022",
+    ],
+
     description:
       "Building an interactive 3D portfolio universe inside an artificial brain (mind) using React Three Fiber and Next.js.",
 
@@ -27,6 +33,11 @@ export const careerData = {
 
     color: "#a855f7",
 
+    dependsOn: [
+      "2023",
+      "2022",
+    ],
+
     description:
       "Developed personal projects and expanded frontend/backend skills.",
 
@@ -49,6 +60,10 @@ export const careerData = {
 
     color: "#22c55e",
 
+    dependsOn: [
+      "2022",
+    ],
+
     description:
       "Focused on software engineering fundamentals and project building.",
 
@@ -70,6 +85,8 @@ export const careerData = {
       "Beginning The Journey",
 
     color: "#f59e0b",
+
+    dependsOn: [],
 
     description:
       "Started exploring programming and technology.",

@@ -22,13 +22,25 @@ export default function ExperienceNode({
       (state) => state.selectedYear
     );
 
-  const isSelected =
-    selectedYear === year;
-
   const color =
     careerData[
       year as keyof typeof careerData
     ].color;
+
+  const isSelected =
+    selectedYear === year;
+
+  const selectedData =
+    selectedYear
+      ? careerData[
+          selectedYear as keyof typeof careerData
+        ]
+      : null;
+
+  const isAncestor =
+    !!selectedData?.dependsOn.includes(
+      year
+    );
 
   return (
     <>
@@ -48,6 +60,20 @@ export default function ExperienceNode({
             100% {
               box-shadow:
                 0 0 20px rgba(102,224,255,0.4);
+            }
+          }
+
+          @keyframes ancestorGlow {
+            0% {
+              opacity: 0.6;
+            }
+
+            50% {
+              opacity: 1;
+            }
+
+            100% {
+              opacity: 0.6;
             }
           }
 
@@ -81,39 +107,55 @@ export default function ExperienceNode({
         style={{
           padding: "16px",
 
-          border: isSelected
-            ? `1px solid ${color}`
-            : "1px solid rgba(102,224,255,0.3)",
+          border:
+            isSelected
+              ? `1px solid ${color}`
+              : isAncestor
+              ? `1px solid ${color}`
+              : "1px solid rgba(102,224,255,0.3)",
 
           borderRadius: "12px",
 
-          background: isSelected
-            ? `${color}20`
-            : "rgba(255,255,255,0.03)",
+          background:
+            isSelected
+              ? `${color}20`
+              : isAncestor
+              ? `${color}12`
+              : "rgba(255,255,255,0.03)",
 
-          boxShadow: isSelected
-            ? `0 0 35px ${color}`
-            : "0 0 20px rgba(102,224,255,0.1)",
+          boxShadow:
+            isSelected
+              ? `0 0 35px ${color}`
+              : isAncestor
+              ? `0 0 20px ${color}`
+              : "0 0 20px rgba(102,224,255,0.1)",
 
           cursor: "pointer",
 
           transition:
             "all 0.3s ease",
 
-          transform: isSelected
-            ? "scale(1.08)"
-            : "scale(1)",
+          transform:
+            isSelected
+              ? "scale(1.08)"
+              : isAncestor
+              ? "scale(1.03)"
+              : "scale(1)",
 
-          animation: isSelected
-            ? "activePulse 2s infinite, floatNode 4s ease-in-out infinite"
-            : "none",
+          animation:
+            isSelected
+              ? "activePulse 2s infinite, floatNode 4s ease-in-out infinite"
+              : isAncestor
+              ? "ancestorGlow 3s infinite"
+              : "none",
         }}
       >
         <h3
           style={{
-            color: isSelected
-              ? color
-              : "white",
+            color:
+              isSelected || isAncestor
+                ? color
+                : "white",
 
             marginBottom: "8px",
           }}
@@ -123,9 +165,10 @@ export default function ExperienceNode({
 
         <p
           style={{
-            opacity: isSelected
-              ? 1
-              : 0.8,
+            opacity:
+              isSelected || isAncestor
+                ? 1
+                : 0.8,
           }}
         >
           {title}
