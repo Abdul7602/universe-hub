@@ -115,7 +115,7 @@ export default function MemoryModal() {
           {current.description}
         </p>
 
-        {current.dependsOn.length > 0 && (
+        {current.dependsOn?.length > 0 && (
           <>
             <h3
               style={{

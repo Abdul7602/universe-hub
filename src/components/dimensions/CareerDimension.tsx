@@ -13,6 +13,7 @@ import MemoryBackdrop from "./MemoryBackdrop";
 import MemoryModal from "./MemoryModal";
 import MemoryPulse from "./MemoryPulse";
 import DependencyGraph from "./DependencyGraph";
+import ResumePanel from "./ResumePanel";
 
 export default function CareerDimension() {
   const setActiveDimension =
@@ -160,6 +161,8 @@ export default function CareerDimension() {
             />
           </CareerOrbit>
         </div>
+
+        <ResumePanel />
       </div>
     </div>
   );
