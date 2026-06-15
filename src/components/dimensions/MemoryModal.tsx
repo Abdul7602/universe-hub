@@ -115,6 +115,52 @@ export default function MemoryModal() {
           {current.description}
         </p>
 
+        {current.dependsOn.length > 0 && (
+          <>
+            <h3
+              style={{
+                color:
+                  current.color ||
+                  "#66e0ff",
+                marginBottom: "12px",
+              }}
+            >
+              Dependency Chain
+            </h3>
+
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "8px",
+                marginBottom: "32px",
+              }}
+            >
+              {current.dependsOn.map(
+                (dependency) => (
+                  <span
+                    key={dependency}
+                    style={{
+                      padding:
+                        "6px 12px",
+                      border:
+                        "1px solid rgba(255,255,255,0.2)",
+                      borderRadius:
+                        "999px",
+                      background:
+                        "rgba(255,255,255,0.05)",
+                      fontSize:
+                        "12px",
+                    }}
+                  >
+                    {dependency}
+                  </span>
+                )
+              )}
+            </div>
+          </>
+        )}
+
         {current.technologies && (
           <>
             <h3
