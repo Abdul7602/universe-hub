@@ -22,6 +22,12 @@ export default function ExperienceNode({
       (state) => state.selectedYear
     );
 
+  const activeMemoryChain =
+    useCareerStore(
+      (state) =>
+        state.activeMemoryChain
+    );
+
   const color =
     careerData[
       year as keyof typeof careerData
@@ -30,15 +36,8 @@ export default function ExperienceNode({
   const isSelected =
     selectedYear === year;
 
-  const selectedData =
-    selectedYear
-      ? careerData[
-          selectedYear as keyof typeof careerData
-        ]
-      : null;
-
-  const isAncestor =
-    !!selectedData?.dependsOn.includes(
+  const isChainActive =
+    activeMemoryChain.includes(
       year
     );
 
@@ -63,9 +62,9 @@ export default function ExperienceNode({
             }
           }
 
-          @keyframes ancestorGlow {
+          @keyframes chainGlow {
             0% {
-              opacity: 0.6;
+              opacity: 0.5;
             }
 
             50% {
@@ -73,7 +72,7 @@ export default function ExperienceNode({
             }
 
             100% {
-              opacity: 0.6;
+              opacity: 0.5;
             }
           }
 
@@ -110,7 +109,7 @@ export default function ExperienceNode({
           border:
             isSelected
               ? `1px solid ${color}`
-              : isAncestor
+              : isChainActive
               ? `1px solid ${color}`
               : "1px solid rgba(102,224,255,0.3)",
 
@@ -119,15 +118,15 @@ export default function ExperienceNode({
           background:
             isSelected
               ? `${color}20`
-              : isAncestor
-              ? `${color}12`
+              : isChainActive
+              ? `${color}15`
               : "rgba(255,255,255,0.03)",
 
           boxShadow:
             isSelected
               ? `0 0 35px ${color}`
-              : isAncestor
-              ? `0 0 20px ${color}`
+              : isChainActive
+              ? `0 0 25px ${color}`
               : "0 0 20px rgba(102,224,255,0.1)",
 
           cursor: "pointer",
@@ -138,22 +137,23 @@ export default function ExperienceNode({
           transform:
             isSelected
               ? "scale(1.08)"
-              : isAncestor
-              ? "scale(1.03)"
+              : isChainActive
+              ? "scale(1.04)"
               : "scale(1)",
 
           animation:
             isSelected
               ? "activePulse 2s infinite, floatNode 4s ease-in-out infinite"
-              : isAncestor
-              ? "ancestorGlow 3s infinite"
+              : isChainActive
+              ? "chainGlow 1.5s infinite"
               : "none",
         }}
       >
         <h3
           style={{
             color:
-              isSelected || isAncestor
+              isSelected ||
+              isChainActive
                 ? color
                 : "white",
 
@@ -166,7 +166,8 @@ export default function ExperienceNode({
         <p
           style={{
             opacity:
-              isSelected || isAncestor
+              isSelected ||
+              isChainActive
                 ? 1
                 : 0.8,
           }}

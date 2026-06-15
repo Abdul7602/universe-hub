@@ -99,4 +99,4 @@ export const careerData = {
       "Discovered software development",
     ],
   },
-};
+} as const;

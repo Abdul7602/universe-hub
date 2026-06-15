@@ -3,7 +3,6 @@
 import { useNavigationStore } from "@/stores/navigationStore";
 import { destinationContent } from "@/data/destinationContent";
 import { links } from "@/data/links";
-import { timeline } from "@/data/timeline/timeline";
 import { skills } from "@/data/skills/skills";
 
 export default function DestinationPanel() {
@@ -61,7 +60,8 @@ export default function DestinationPanel() {
         overflowY: "auto",
         padding: "24px",
         background: "rgba(0,0,0,0.8)",
-        border: "1px solid rgba(255,255,255,0.2)",
+        border:
+          "1px solid rgba(255,255,255,0.2)",
         borderRadius: "16px",
         color: "white",
         backdropFilter: "blur(10px)",
@@ -147,29 +147,6 @@ export default function DestinationPanel() {
             >
               Enter Dimension
             </button>
-
-            <h3
-                  style={{
-                    marginTop: "6px",
-                    marginBottom: "12px",
-                  }}
-            >
-            Timeline </h3>
-
-            {timeline.map((item) => (
-              <div
-                key={item.year + item.title}
-                style={{
-                  marginBottom: "16px",
-                }}
-              >
-                <strong>{item.year}</strong>
-
-                <div>{item.title}</div>
-
-                <small>{item.description}</small>
-              </div>
-            ))}
           </div>
         </>
       )}

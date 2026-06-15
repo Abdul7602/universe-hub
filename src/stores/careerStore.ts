@@ -9,6 +9,8 @@ type CareerStore = {
 
   pulseTrigger: number;
 
+  activeMemoryChain: string[];
+
   setNode: (
     year: string,
     title: string,
@@ -16,6 +18,10 @@ type CareerStore = {
   ) => void;
 
   clearNode: () => void;
+
+  setMemoryChain: (
+    years: string[]
+  ) => void;
 };
 
 export const useCareerStore =
@@ -25,6 +31,15 @@ export const useCareerStore =
     selectedColor: null,
 
     pulseTrigger: 0,
+
+    activeMemoryChain: [],
+
+    setMemoryChain: (
+      years
+    ) =>
+      set({
+        activeMemoryChain: years,
+      }),
 
     setNode: (
       year,
@@ -38,6 +53,8 @@ export const useCareerStore =
 
         pulseTrigger:
           state.pulseTrigger + 1,
+
+        activeMemoryChain: [],
       })),
 
     clearNode: () =>
@@ -45,5 +62,7 @@ export const useCareerStore =
         selectedYear: null,
         selectedTitle: null,
         selectedColor: null,
+
+        activeMemoryChain: [],
       }),
   }));
