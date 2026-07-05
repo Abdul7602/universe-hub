@@ -23,6 +23,8 @@ type NavigationStore = {
   setActiveDimension: (
     dimension: string | null
   ) => void;
+
+  resetUniverse: () => void;
 };
 
 export const useNavigationStore =
@@ -58,5 +60,13 @@ export const useNavigationStore =
     ) =>
       set({
         activeDimension: dimension,
+      }),
+
+    resetUniverse: () =>
+      set({
+        selectedDestination: null,
+        hoveredDestination: null,
+        cameraTarget: null,
+        activeDimension: null,
       }),
   }));

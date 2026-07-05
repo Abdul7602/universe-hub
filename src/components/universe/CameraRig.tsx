@@ -12,6 +12,11 @@ export default function CameraRig() {
       (state) => state.cameraTarget
     );
 
+  const setCameraTarget =
+    useNavigationStore(
+      (state) => state.setCameraTarget
+    );
+
   const targetX = useRef(0);
   const targetY = useRef(0);
 
@@ -25,19 +30,37 @@ export default function CameraRig() {
           : cameraTarget[2] + 8;
 
       camera.position.x +=
-        (cameraTarget[0] - camera.position.x) * 0.03;
+        (cameraTarget[0] -
+          camera.position.x) * 0.03;
 
       camera.position.y +=
-        (cameraTarget[1] - camera.position.y) * 0.03;
+        (cameraTarget[1] -
+          camera.position.y) * 0.03;
 
       camera.position.z +=
-        (targetZ - camera.position.z) * 0.03;
+        (targetZ -
+          camera.position.z) * 0.03;
 
       camera.lookAt(
         cameraTarget[0],
         cameraTarget[1],
         cameraTarget[2]
       );
+
+      if (
+        cameraTarget[0] === 0 &&
+        cameraTarget[1] === 0 &&
+        cameraTarget[2] === 0
+      ) {
+        const reachedHome =
+          Math.abs(camera.position.x) < 0.02 &&
+          Math.abs(camera.position.y) < 0.02 &&
+          Math.abs(camera.position.z - 18) < 0.02;
+
+        if (reachedHome) {
+          setCameraTarget(null);
+        }
+      }
 
       return;
     }
@@ -53,10 +76,12 @@ export default function CameraRig() {
       mouse.y * 0.8;
 
     camera.position.x +=
-      (targetX.current - camera.position.x) * 0.03;
+      (targetX.current -
+        camera.position.x) * 0.03;
 
     camera.position.y +=
-      (targetY.current - camera.position.y) * 0.03;
+      (targetY.current -
+        camera.position.y) * 0.03;
 
     camera.lookAt(0, 0, 0);
   });

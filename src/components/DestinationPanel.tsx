@@ -96,41 +96,46 @@ export default function DestinationPanel() {
         {actionText}
       </a>
 
-      {selectedDestination === "career" && (
+      {(selectedDestination === "career" ||
+        selectedDestination === "projects" ||
+        selectedDestination === "github" ||
+	selectedDestination === "contact") && (
         <>
-          <div style={{ marginTop: "24px" }}>
-            <h3>Skills</h3>
+          {selectedDestination === "career" && (
+            <div style={{ marginTop: "24px" }}>
+              <h3>Skills</h3>
 
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: "8px",
-                marginTop: "12px",
-              }}
-            >
-              {skills.map((skill) => (
-                <span
-                  key={skill}
-                  style={{
-                    padding: "6px 10px",
-                    border:
-                      "1px solid rgba(255,255,255,0.2)",
-                    borderRadius: "999px",
-                    fontSize: "12px",
-                  }}
-                >
-                  {skill}
-                </span>
-              ))}
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "8px",
+                  marginTop: "12px",
+                }}
+              >
+                {skills.map((skill) => (
+                  <span
+                    key={skill}
+                    style={{
+                      padding: "6px 10px",
+                      border:
+                        "1px solid rgba(255,255,255,0.2)",
+                      borderRadius: "999px",
+                      fontSize: "12px",
+                    }}
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           <div style={{ marginTop: "18px" }}>
             <button
               onClick={() =>
                 setActiveDimension(
-                  "career"
+                  selectedDestination
                 )
               }
               style={{

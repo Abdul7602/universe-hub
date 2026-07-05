@@ -20,6 +20,6 @@ export const destinationContent = {
   contact: {
     title: "Contact Moon",
     description:
-      "Get in touch through email, social platforms, and future contact portals.",
+      "Let's discuss software, systems, and ideas via available platforms and future contact portals.",
   },
 };

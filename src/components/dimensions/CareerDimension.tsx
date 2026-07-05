@@ -16,9 +16,9 @@ import DependencyGraph from "./DependencyGraph";
 import ResumePanel from "./ResumePanel";
 
 export default function CareerDimension() {
-  const setActiveDimension =
+  const resetUniverse =
     useNavigationStore(
-      (state) => state.setActiveDimension
+      (state) => state.resetUniverse
     );
 
   const selectedYear =
@@ -39,9 +39,7 @@ export default function CareerDimension() {
       }}
     >
       <button
-        onClick={() =>
-          setActiveDimension(null)
-        }
+        onClick={() => resetUniverse()}
         style={{
           position: "fixed",
           top: "24px",
@@ -92,9 +90,9 @@ export default function CareerDimension() {
         >
           <CareerDNAModel />
 
-	  <MemoryPulse />
+          <MemoryPulse />
 
-	  <DependencyGraph />
+          <DependencyGraph />
 
           <DNAOrbit />
 
@@ -109,8 +107,6 @@ export default function CareerDimension() {
             </>
           )}
 
-          {/* TOP NODE */}
-
           <CareerOrbit
             radius={280}
             speed={0.002}
@@ -121,8 +117,6 @@ export default function CareerDimension() {
               title="Universe Hub Development"
             />
           </CareerOrbit>
-
-          {/* LEFT NODE */}
 
           <CareerOrbit
             radius={280}
@@ -135,8 +129,6 @@ export default function CareerDimension() {
             />
           </CareerOrbit>
 
-          {/* RIGHT NODE */}
-
           <CareerOrbit
             radius={280}
             speed={0.002}
@@ -147,8 +139,6 @@ export default function CareerDimension() {
               title="Learning and Career Growth"
             />
           </CareerOrbit>
-
-          {/* BOTTOM NODE */}
 
           <CareerOrbit
             radius={280}
