@@ -7,17 +7,18 @@ type Props = {
   position: [number, number, number];
 };
 
-export default function DestinationLabel({
-  text,
-  position,
-}: Props) {
+export default function DestinationLabel({ text, position }: Props) {
   return (
     <Text
       position={position}
       fontSize={0.35}
-      color="white"
+      color="#e8f0ff"
       anchorX="center"
       anchorY="middle"
+      outlineWidth={0.015}
+      outlineColor="#5ee4ff"
+      outlineOpacity={0.35}
+      fillOpacity={0.95}
     >
       {text}
     </Text>
