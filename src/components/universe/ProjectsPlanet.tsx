@@ -1,13 +1,38 @@
 "use client";
 
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useNavigationStore } from "@/stores/navigationStore";
 import * as THREE from "three";
 import DestinationLabel from "./DestinationLabel";
+import {
+  createFresnelMaterial,
+  getCloudShellTexture,
+  getQualityTier,
+  getRingTexture,
+  getTerrainSurface,
+} from "./visuals";
 
-function disableRaycast(mesh: THREE.Mesh | null) {
-  if (mesh) mesh.raycast = () => {};
+function disableRaycast(object: THREE.Object3D | null) {
+  if (object) object.raycast = () => {};
+}
+
+/** RingGeometry with UVs remapped radially so band textures work. */
+function createRadialRingGeometry(
+  innerRadius: number,
+  outerRadius: number
+): THREE.RingGeometry {
+  const geometry = new THREE.RingGeometry(innerRadius, outerRadius, 96, 1);
+  const pos = geometry.attributes.position;
+  const uv = geometry.attributes.uv;
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i);
+    const y = pos.getY(i);
+    const r = Math.sqrt(x * x + y * y);
+    uv.setXY(i, (r - innerRadius) / (outerRadius - innerRadius), 0.5);
+  }
+  uv.needsUpdate = true;
+  return geometry;
 }
 
 export default function ProjectsPlanet() {
@@ -26,19 +51,64 @@ export default function ProjectsPlanet() {
 
   const isSelected = selectedDestination === "projects";
   const materialRef = useRef<THREE.MeshStandardMaterial>(null);
-  const atmosphereRef = useRef<THREE.Mesh>(null);
+  const planetRef = useRef<THREE.Mesh>(null);
+  const cloudsRef = useRef<THREE.Mesh>(null);
+  const emissiveLevel = useRef(0.35);
 
-  useFrame(({ clock }) => {
+  const surface = useMemo(
+    () =>
+      getTerrainSurface("projects-terrain", {
+        base: "#4a3585",
+        low: "#241a55",
+        high: "#9a7fe0",
+      }),
+    []
+  );
+
+  const cloudTexture = useMemo(
+    () => getCloudShellTexture("projects-clouds"),
+    []
+  );
+
+  const ringGeometry = useMemo(
+    () => createRadialRingGeometry(1.7, 2.55),
+    []
+  );
+
+  const ringTexture = useMemo(
+    () => getRingTexture("projects-ring", "#9a7fff"),
+    []
+  );
+
+  const atmosphereMaterial = useMemo(
+    () =>
+      createFresnelMaterial({
+        color: "#8a5fff",
+        power: 2.6,
+        intensity: 1.5,
+        opacity: 0.5,
+      }),
+    []
+  );
+
+  useFrame(({ clock }, delta) => {
     const t = clock.elapsedTime;
-    const base = isSelected ? 3 : 1;
+
+    const target = isSelected ? 1.4 : 0.35;
+    emissiveLevel.current +=
+      (target - emissiveLevel.current) * Math.min(delta * 4, 1);
+
     if (materialRef.current) {
       materialRef.current.emissiveIntensity =
-        base + Math.sin(t * 2) * 0.25;
+        emissiveLevel.current + Math.sin(t * 0.45) * 0.08;
     }
-    if (atmosphereRef.current) {
-      const breath = 1 + Math.sin(t * 1.5) * 0.05;
-      atmosphereRef.current.scale.set(breath, breath, breath);
-    }
+
+    // Slow planetary rotation; clouds drift slightly faster
+    if (planetRef.current) planetRef.current.rotation.y = t * 0.03;
+    if (cloudsRef.current) cloudsRef.current.rotation.y = t * 0.045;
+
+    atmosphereMaterial.uniforms.uIntensity.value =
+      1.5 + Math.sin(t * 0.5 + 1) * 0.2;
   });
 
   return (
@@ -46,39 +116,61 @@ export default function ProjectsPlanet() {
       position={[-12, 2, -4]}
       scale={isSelected ? 1.2 : 1}
     >
-      {/* Atmosphere shell */}
+      {/* Local violet light grounding the planet */}
+      <pointLight
+        intensity={0.45}
+        distance={7}
+        decay={2}
+        color="#8a5fff"
+      />
+
+      {/* Atmosphere — fresnel rim */}
       <mesh
-        ref={(el) => {
-          atmosphereRef.current = el;
-          disableRaycast(el);
-        }}
+        ref={(el) => disableRaycast(el)}
+        material={atmosphereMaterial}
       >
-        <sphereGeometry args={[1.45, 32, 32]} />
-        <meshBasicMaterial
-          color="#8a5fff"
-          transparent
-          opacity={isSelected ? 0.1 : 0.05}
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
-        />
+        <sphereGeometry args={[1.34, 48, 48]} />
       </mesh>
 
-      {/* Planetary ring */}
+      {/* Cloud shell — wispy alpha texture, independent drift.
+          Skipped entirely on low-end devices. */}
+      {getQualityTier() === "high" && (
       <mesh
-        ref={disableRaycast}
+        ref={(el) => { cloudsRef.current = el; disableRaycast(el); }}
+      >
+        <sphereGeometry args={[1.235, 48, 48]} />
+        <meshStandardMaterial
+          color="#d8dcff"
+          alphaMap={cloudTexture}
+          transparent
+          opacity={0.55}
+          depthWrite={false}
+          roughness={1}
+          metalness={0}
+        />
+      </mesh>
+      )}
+
+      {/* Banded ring with radial gradient texture */}
+      <mesh
+        ref={(el) => disableRaycast(el)}
+        geometry={ringGeometry}
         rotation={[Math.PI / 2.5, 0.3, 0]}
       >
-        <torusGeometry args={[1.6, 0.015, 8, 64]} />
         <meshBasicMaterial
-          color="#7b4fff"
+          map={ringTexture}
+          color="#b9a4ff"
           transparent
-          opacity={0.2}
+          opacity={0.55}
+          side={THREE.DoubleSide}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
         />
       </mesh>
 
+      {/* Planet body — terrain color + bump, handlers unchanged */}
       <mesh
+        ref={planetRef}
         onPointerOver={() => setHoveredDestination("projects")}
         onPointerOut={() => setHoveredDestination(null)}
         onClick={() => {
@@ -89,11 +181,14 @@ export default function ProjectsPlanet() {
         <sphereGeometry args={[1.2, 64, 64]} />
         <meshStandardMaterial
           ref={materialRef}
-          color="#8a5fff"
-          emissive="#7b4fff"
-          emissiveIntensity={isSelected ? 3 : 1}
-          metalness={0.35}
-          roughness={0.45}
+          map={surface.map}
+          bumpMap={surface.bumpMap}
+          bumpScale={0.035}
+          color="#cabdf5"
+          emissive="#3a2080"
+          emissiveIntensity={isSelected ? 1.4 : 0.35}
+          metalness={0.08}
+          roughness={0.75}
         />
       </mesh>
 

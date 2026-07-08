@@ -1,13 +1,14 @@
 "use client";
 
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useNavigationStore } from "@/stores/navigationStore";
 import * as THREE from "three";
 import DestinationLabel from "./DestinationLabel";
+import { createFresnelMaterial, getCrateredSurface } from "./visuals";
 
-function disableRaycast(mesh: THREE.Mesh | null) {
-  if (mesh) mesh.raycast = () => {};
+function disableRaycast(object: THREE.Object3D | null) {
+  if (object) object.raycast = () => {};
 }
 
 export default function ContactMoon() {
@@ -26,19 +27,42 @@ export default function ContactMoon() {
 
   const isSelected = selectedDestination === "contact";
   const materialRef = useRef<THREE.MeshStandardMaterial>(null);
-  const glowRef = useRef<THREE.Mesh>(null);
+  const moonRef = useRef<THREE.Mesh>(null);
+  const emissiveLevel = useRef(0.25);
 
-  useFrame(({ clock }) => {
+  const surface = useMemo(
+    () => getCrateredSurface("contact-moon", "#c9b090", 17, 110),
+    []
+  );
+
+  const rimMaterial = useMemo(
+    () =>
+      createFresnelMaterial({
+        color: "#ffcf88",
+        power: 3,
+        intensity: 1.6,
+        opacity: 0.5,
+      }),
+    []
+  );
+
+  useFrame(({ clock }, delta) => {
     const t = clock.elapsedTime;
-    const base = isSelected ? 3 : 1;
+
+    const target = isSelected ? 1.2 : 0.25;
+    emissiveLevel.current +=
+      (target - emissiveLevel.current) * Math.min(delta * 4, 1);
+
     if (materialRef.current) {
       materialRef.current.emissiveIntensity =
-        base + Math.sin(t * 1.8) * 0.2;
+        emissiveLevel.current + Math.sin(t * 0.3) * 0.05;
     }
-    if (glowRef.current) {
-      const breath = 1 + Math.sin(t * 1.2) * 0.06;
-      glowRef.current.scale.set(breath, breath, breath);
-    }
+
+    // Quiet, slow lunar rotation
+    if (moonRef.current) moonRef.current.rotation.y = t * 0.02;
+
+    rimMaterial.uniforms.uIntensity.value =
+      1.6 + Math.sin(t * 0.4 + 2.5) * 0.25;
   });
 
   return (
@@ -46,48 +70,25 @@ export default function ContactMoon() {
       position={[0, -8, -8]}
       scale={isSelected ? 1.2 : 1}
     >
-      {/* Moon glow halo */}
+      {/* Faint warm local light — quiet ambience */}
+      <pointLight
+        intensity={0.35}
+        distance={6}
+        decay={2}
+        color="#ffd8a0"
+      />
+
+      {/* Warm fresnel rim glow */}
       <mesh
-        ref={(el) => {
-          glowRef.current = el;
-          disableRaycast(el);
-        }}
+        ref={(el) => disableRaycast(el)}
+        material={rimMaterial}
       >
-        <sphereGeometry args={[0.95, 32, 32]} />
-        <meshBasicMaterial
-          color="#f7c65f"
-          transparent
-          opacity={isSelected ? 0.1 : 0.05}
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
-        />
+        <sphereGeometry args={[0.735, 48, 48]} />
       </mesh>
 
-      {/* Crater-like surface detail (decorative low-opacity spots) */}
+      {/* Moon body — cratered surface, handlers unchanged */}
       <mesh
-        ref={disableRaycast}
-        position={[0.15, 0.1, 0.55]}
-      >
-        <sphereGeometry args={[0.12, 12, 12]} />
-        <meshBasicMaterial
-          color="#c8a040"
-          transparent
-          opacity={0.15}
-        />
-      </mesh>
-      <mesh
-        ref={disableRaycast}
-        position={[-0.25, -0.15, 0.5]}
-      >
-        <sphereGeometry args={[0.08, 12, 12]} />
-        <meshBasicMaterial
-          color="#c8a040"
-          transparent
-          opacity={0.12}
-        />
-      </mesh>
-
-      <mesh
+        ref={moonRef}
         onPointerOver={() => setHoveredDestination("contact")}
         onPointerOut={() => setHoveredDestination(null)}
         onClick={() => {
@@ -98,11 +99,14 @@ export default function ContactMoon() {
         <sphereGeometry args={[0.7, 64, 64]} />
         <meshStandardMaterial
           ref={materialRef}
-          color="#f7c65f"
+          map={surface.map}
+          bumpMap={surface.bumpMap}
+          bumpScale={0.04}
+          color="#e8d4b0"
           emissive="#ffd080"
-          emissiveIntensity={isSelected ? 3 : 1}
-          metalness={0.15}
-          roughness={0.65}
+          emissiveIntensity={isSelected ? 1.2 : 0.25}
+          metalness={0}
+          roughness={0.92}
         />
       </mesh>
 

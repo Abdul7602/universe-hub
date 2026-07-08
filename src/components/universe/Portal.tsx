@@ -1,119 +1,130 @@
 "use client";
 
 import { useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import PortalParticles from "./PortalParticles";
+import { createFresnelMaterial, getRadialGlowTexture } from "./visuals";
 
 type PortalProps = {
   position: [number, number, number];
 };
 
-function disableRaycast(mesh: THREE.Mesh | null) {
-  if (mesh) mesh.raycast = () => {};
+function disableRaycast(object: THREE.Object3D | null) {
+  if (object) object.raycast = () => {};
 }
 
 export default function Portal({ position }: PortalProps) {
-  const portalRef = useRef<THREE.Mesh>(null);
-  const innerRef = useRef<THREE.Mesh>(null);
-  const outerGlowRef = useRef<THREE.Mesh>(null);
-  const coreRef = useRef<THREE.Mesh>(null);
+  const ringRef = useRef<THREE.Mesh>(null);
+  const innerRingRef = useRef<THREE.Mesh>(null);
+  const horizonRef = useRef<THREE.Mesh>(null);
+  const coreRef = useRef<THREE.Sprite>(null);
+
+  const horizonMaterial = useMemo(
+    () =>
+      createFresnelMaterial({
+        color: "#7deeff",
+        power: 1.8,
+        intensity: 1.6,
+        opacity: 0.55,
+      }),
+    []
+  );
+
+  const coreTexture = useMemo(
+    () =>
+      getRadialGlowTexture("portal-core", [
+        [0, "rgba(255,255,255,0.95)"],
+        [0.2, "rgba(200,248,255,0.6)"],
+        [0.55, "rgba(94,228,255,0.18)"],
+        [1, "rgba(94,228,255,0)"],
+      ]),
+    []
+  );
 
   useFrame(({ clock }) => {
     const t = clock.elapsedTime;
 
-    if (portalRef.current) {
-      portalRef.current.rotation.z += 0.012;
-      const mat = portalRef.current.material as THREE.MeshStandardMaterial;
-      mat.emissiveIntensity = 2 + Math.sin(t * 3) * 1.2;
+    if (ringRef.current) {
+      ringRef.current.rotation.z += 0.01;
+      const mat = ringRef.current.material as THREE.MeshStandardMaterial;
+      mat.emissiveIntensity = 2.2 + Math.sin(t * 1.6) * 0.7;
     }
 
-    if (innerRef.current) {
-      innerRef.current.rotation.z -= 0.008;
-      const mat = innerRef.current.material as THREE.MeshStandardMaterial;
-      mat.emissiveIntensity = 6 + Math.sin(t * 4) * 2;
-      const innerPulse = 1 + Math.sin(t * 2.5) * 0.06;
-      innerRef.current.scale.set(innerPulse, innerPulse, innerPulse);
+    if (innerRingRef.current) {
+      innerRingRef.current.rotation.z -= 0.007;
+      const mat = innerRingRef.current
+        .material as THREE.MeshStandardMaterial;
+      mat.emissiveIntensity = 4 + Math.sin(t * 2.1 + 0.8) * 1.2;
+      const pulse = 1 + Math.sin(t * 1.3) * 0.04;
+      innerRingRef.current.scale.set(pulse, pulse, pulse);
     }
 
-    if (outerGlowRef.current) {
-      const glowPulse = 1 + Math.sin(t * 1.8) * 0.08;
-      outerGlowRef.current.scale.set(glowPulse, glowPulse, glowPulse);
+    if (horizonRef.current) {
+      const breath = 1 + Math.sin(t * 0.9) * 0.05;
+      horizonRef.current.scale.set(breath, breath, breath);
+      horizonMaterial.uniforms.uIntensity.value =
+        1.6 + Math.sin(t * 1.1 + 2) * 0.4;
     }
 
     if (coreRef.current) {
-      const corePulse = 1 + Math.sin(t * 5) * 0.1;
-      coreRef.current.scale.set(corePulse, corePulse, corePulse);
-      const mat = coreRef.current.material as THREE.MeshStandardMaterial;
-      mat.emissiveIntensity = 12 + Math.sin(t * 6) * 4;
+      const corePulse = 1 + Math.sin(t * 1.7) * 0.08;
+      coreRef.current.scale.set(corePulse * 2.4, corePulse * 2.4, 1);
+      const mat = coreRef.current.material as THREE.SpriteMaterial;
+      mat.opacity = 0.75 + Math.sin(t * 2.3) * 0.15;
     }
   });
 
   return (
     <group position={position}>
-      {/* Outer volumetric glow */}
-      <mesh ref={disableRaycast}>
-        <sphereGeometry args={[2.2, 32, 32]} />
-        <meshBasicMaterial
-          color="#5ee4ff"
-          transparent
-          opacity={0.04}
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
+      {/* Outer portal ring — slow spin, gentle emissive pulse */}
+      <mesh ref={(el) => { ringRef.current = el; disableRaycast(el); }}>
+        <torusGeometry args={[1.5, 0.07, 24, 120]} />
+        <meshStandardMaterial
+          color="#2a6a80"
+          emissive="#5ee4ff"
+          emissiveIntensity={2.2}
+          metalness={0.75}
+          roughness={0.25}
         />
       </mesh>
 
-      {/* Portal torus ring */}
-      <mesh ref={portalRef}>
-        <torusGeometry args={[1.5, 0.08, 16, 100]} />
+      {/* Inner counter-rotating ring */}
+      <mesh ref={(el) => { innerRingRef.current = el; disableRaycast(el); }}>
+        <torusGeometry args={[1.22, 0.028, 16, 100]} />
         <meshStandardMaterial
-          color="#5ee4ff"
-          emissive="#5ee4ff"
-          emissiveIntensity={2}
-          metalness={0.3}
+          color="#8ff4ff"
+          emissive="#99ffff"
+          emissiveIntensity={4}
+          transparent
+          opacity={0.85}
+          metalness={0.5}
           roughness={0.2}
         />
       </mesh>
 
-      {/* Secondary inner ring */}
-      <mesh ref={innerRef}>
-        <torusGeometry args={[1.2, 0.04, 12, 80]} />
-        <meshStandardMaterial
-          color="#99ffff"
-          emissive="#99ffff"
-          emissiveIntensity={6}
-          transparent
-          opacity={0.7}
-          metalness={0.4}
-          roughness={0.15}
-        />
+      {/* Event-horizon shell — fresnel edge glow, hollow center */}
+      <mesh
+        ref={(el) => { horizonRef.current = el; disableRaycast(el); }}
+        material={horizonMaterial}
+      >
+        <sphereGeometry args={[1.18, 48, 48]} />
       </mesh>
 
-      {/* Inner glowing sphere */}
-      <mesh ref={outerGlowRef}>
-        <sphereGeometry args={[1.2, 32, 32]} />
-        <meshStandardMaterial
-          color="#99ffff"
-          emissive="#99ffff"
-          emissiveIntensity={10}
+      {/* Soft luminous core */}
+      <sprite
+        ref={(el) => { coreRef.current = el; disableRaycast(el); }}
+        scale={[2.4, 2.4, 1]}
+      >
+        <spriteMaterial
+          map={coreTexture}
           transparent
-          opacity={0.75}
-          metalness={0.2}
-          roughness={0.1}
+          opacity={0.8}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+          fog={false}
         />
-      </mesh>
-
-      {/* Bright core */}
-      <mesh ref={coreRef}>
-        <sphereGeometry args={[0.5, 24, 24]} />
-        <meshStandardMaterial
-          color="#ffffff"
-          emissive="#c8f8ff"
-          emissiveIntensity={12}
-          transparent
-          opacity={0.9}
-        />
-      </mesh>
+      </sprite>
 
       <PortalParticles />
     </group>
