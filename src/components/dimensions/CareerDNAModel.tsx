@@ -95,18 +95,18 @@ export default function CareerDNAModel() {
             inset: 0,
 
             border: active
-              ? `2px solid ${color}`
-              : "2px solid rgba(102,224,255,0.4)",
+              ? `1px solid ${color}`
+              : "1px solid rgba(102,224,255,0.28)",
 
             borderRadius: "50%",
 
             animation: `spinDNA ${
-              active ? "8s" : "20s"
+              active ? "12s" : "40s"
             } linear infinite`,
 
             boxShadow: active
-              ? `0 0 50px ${color}`
-              : "none",
+              ? `0 0 40px -6px ${color}`
+              : "0 0 18px -8px rgba(102,224,255,0.3)",
           }}
         />
 

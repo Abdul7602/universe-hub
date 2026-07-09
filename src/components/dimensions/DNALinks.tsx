@@ -40,15 +40,15 @@ export default function DNALinks() {
         {`
           @keyframes neuralFlow {
             0% {
-              opacity: 0.3;
+              opacity: 0.35;
             }
 
             50% {
-              opacity: 1;
+              opacity: 0.9;
             }
 
             100% {
-              opacity: 0.3;
+              opacity: 0.35;
             }
           }
         `}
@@ -73,11 +73,11 @@ export default function DNALinks() {
             "translateX(-50%)",
 
           boxShadow: glow("top")
-            ? `0 0 40px ${color}`
-            : "0 0 20px #66e0ff",
+            ? `0 0 26px -4px ${color}`
+            : "0 0 14px -2px #66e0ff",
 
           animation: glow("top")
-            ? "neuralFlow 1s infinite"
+            ? "neuralFlow 2.2s ease-in-out infinite"
             : "none",
         }}
       />
@@ -98,11 +98,11 @@ export default function DNALinks() {
             : "linear-gradient(to right, #66e0ff, transparent)",
 
           boxShadow: glow("left")
-            ? `0 0 40px ${color}`
-            : "0 0 20px #66e0ff",
+            ? `0 0 26px -4px ${color}`
+            : "0 0 14px -2px #66e0ff",
 
           animation: glow("left")
-            ? "neuralFlow 1s infinite"
+            ? "neuralFlow 2.2s ease-in-out infinite"
             : "none",
         }}
       />
@@ -123,11 +123,11 @@ export default function DNALinks() {
             : "linear-gradient(to left, #66e0ff, transparent)",
 
           boxShadow: glow("right")
-            ? `0 0 40px ${color}`
-            : "0 0 20px #66e0ff",
+            ? `0 0 26px -4px ${color}`
+            : "0 0 14px -2px #66e0ff",
 
           animation: glow("right")
-            ? "neuralFlow 1s infinite"
+            ? "neuralFlow 2.2s ease-in-out infinite"
             : "none",
         }}
       />
@@ -151,11 +151,11 @@ export default function DNALinks() {
             "translateX(-50%)",
 
           boxShadow: glow("bottom")
-            ? `0 0 40px ${color}`
-            : "0 0 20px #66e0ff",
+            ? `0 0 26px -4px ${color}`
+            : "0 0 14px -2px #66e0ff",
 
           animation: glow("bottom")
-            ? "neuralFlow 1s infinite"
+            ? "neuralFlow 2.2s ease-in-out infinite"
             : "none",
         }}
       />

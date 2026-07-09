@@ -41,10 +41,10 @@ export default function DNAOrbit() {
           width: "420px",
           height: "420px",
           border:
-            "1px solid rgba(102,224,255,0.15)",
+            "1px dashed rgba(102,224,255,0.14)",
           borderRadius: "50%",
           animation:
-            "rotateOrbit 18s linear infinite",
+            "rotateOrbit 70s linear infinite",
         }}
       />
 
@@ -56,10 +56,12 @@ export default function DNAOrbit() {
           width: "560px",
           height: "560px",
           border:
-            "1px solid rgba(102,224,255,0.08)",
+            "1px solid rgba(102,224,255,0.05)",
           borderRadius: "50%",
+          boxShadow:
+            "0 0 22px -8px rgba(102,224,255,0.25), inset 0 0 22px -8px rgba(102,224,255,0.2)",
           animation:
-            "rotateOrbitReverse 30s linear infinite",
+            "rotateOrbitReverse 110s linear infinite",
         }}
       />
     </>

@@ -14,21 +14,21 @@ export default function DNAEnergy() {
         {`
           @keyframes pulseEnergy {
             0% {
-              opacity: 0.4;
+              opacity: 0.3;
               transform:
                 translate(-50%, -50%)
                 scale(1);
             }
 
             50% {
-              opacity: 1;
+              opacity: 0.75;
               transform:
                 translate(-50%, -50%)
-                scale(1.05);
+                scale(1.04);
             }
 
             100% {
-              opacity: 0.4;
+              opacity: 0.3;
               transform:
                 translate(-50%, -50%)
                 scale(1);
@@ -47,7 +47,7 @@ export default function DNAEnergy() {
           height: "320px",
 
           border:
-            `2px solid ${color}`,
+            `1px solid ${color}`,
 
           borderRadius: "50%",
 
@@ -55,10 +55,10 @@ export default function DNAEnergy() {
             "translate(-50%, -50%)",
 
           animation:
-            "pulseEnergy 2s infinite",
+            "pulseEnergy 4.5s ease-in-out infinite",
 
           boxShadow:
-            `0 0 60px ${color}`,
+            `0 0 36px -6px ${color}`,
 
           transition:
             "all 0.5s ease",
