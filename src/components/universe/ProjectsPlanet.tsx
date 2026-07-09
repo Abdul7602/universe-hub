@@ -48,8 +48,12 @@ export default function ProjectsPlanet() {
   const selectedDestination = useNavigationStore(
     (state) => state.selectedDestination
   );
+  const hoveredDestination = useNavigationStore(
+    (state) => state.hoveredDestination
+  );
 
   const isSelected = selectedDestination === "projects";
+  const isHovered = hoveredDestination === "projects";
   const materialRef = useRef<THREE.MeshStandardMaterial>(null);
   const planetRef = useRef<THREE.Mesh>(null);
   const cloudsRef = useRef<THREE.Mesh>(null);
@@ -94,7 +98,7 @@ export default function ProjectsPlanet() {
   useFrame(({ clock }, delta) => {
     const t = clock.elapsedTime;
 
-    const target = isSelected ? 1.4 : 0.35;
+    const target = isSelected ? 1.4 : isHovered ? 0.75 : 0.35;
     emissiveLevel.current +=
       (target - emissiveLevel.current) * Math.min(delta * 4, 1);
 

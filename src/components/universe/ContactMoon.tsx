@@ -24,8 +24,12 @@ export default function ContactMoon() {
   const selectedDestination = useNavigationStore(
     (state) => state.selectedDestination
   );
+  const hoveredDestination = useNavigationStore(
+    (state) => state.hoveredDestination
+  );
 
   const isSelected = selectedDestination === "contact";
+  const isHovered = hoveredDestination === "contact";
   const materialRef = useRef<THREE.MeshStandardMaterial>(null);
   const moonRef = useRef<THREE.Mesh>(null);
   const emissiveLevel = useRef(0.25);
@@ -49,7 +53,7 @@ export default function ContactMoon() {
   useFrame(({ clock }, delta) => {
     const t = clock.elapsedTime;
 
-    const target = isSelected ? 1.2 : 0.25;
+    const target = isSelected ? 1.2 : isHovered ? 0.6 : 0.25;
     emissiveLevel.current +=
       (target - emissiveLevel.current) * Math.min(delta * 4, 1);
 

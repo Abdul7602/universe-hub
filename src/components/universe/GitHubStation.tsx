@@ -26,8 +26,12 @@ export default function GitHubStation() {
   const selectedDestination = useNavigationStore(
     (state) => state.selectedDestination
   );
+  const hoveredDestination = useNavigationStore(
+    (state) => state.hoveredDestination
+  );
 
   const isSelected = selectedDestination === "github";
+  const isHovered = hoveredDestination === "github";
   const coreMaterialRef = useRef<THREE.MeshStandardMaterial>(null);
   const habitatRef = useRef<THREE.Group>(null);
   const beaconRef = useRef<THREE.MeshStandardMaterial>(null);
@@ -51,7 +55,7 @@ export default function GitHubStation() {
   useFrame(({ clock }, delta) => {
     const t = clock.elapsedTime;
 
-    const target = isSelected ? 4 : 1.5;
+    const target = isSelected ? 4 : isHovered ? 2.4 : 1.5;
     emissiveLevel.current +=
       (target - emissiveLevel.current) * Math.min(delta * 4, 1);
 

@@ -19,17 +19,24 @@ export default function DebugHover() {
         position: "fixed",
         top: "20px",
         left: "20px",
-        color: "white",
-        fontFamily: "monospace",
         zIndex: 9999,
+        fontFamily:
+          "ui-monospace, SFMono-Regular, Menlo, monospace",
+        fontSize: "10px",
+        letterSpacing: "0.22em",
+        textTransform: "uppercase",
+        color: "rgba(154, 223, 238, 0.55)",
+        lineHeight: 1.9,
+        pointerEvents: "none",
+        userSelect: "none",
       }}
     >
       <div>
-        Hovered: {hoveredDestination ?? "none"}
+        Signal ▸ {hoveredDestination ?? "—"}
       </div>
 
       <div>
-        Selected: {selectedDestination ?? "none"}
+        Lock&nbsp;&nbsp; ▸ {selectedDestination ?? "—"}
       </div>
     </div>
   );

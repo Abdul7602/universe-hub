@@ -58,25 +58,39 @@ export default function DestinationPanel() {
         width: "320px",
         maxHeight: "70vh",
         overflowY: "auto",
-        padding: "24px",
-        background: "rgba(0,0,0,0.8)",
+        padding: "26px",
+        background:
+          "linear-gradient(170deg, rgba(6,14,24,0.88), rgba(3,8,14,0.92))",
         border:
-          "1px solid rgba(255,255,255,0.2)",
-        borderRadius: "16px",
+          "1px solid rgba(94,228,255,0.3)",
+        borderRadius: "10px",
         color: "white",
-        backdropFilter: "blur(10px)",
+        backdropFilter: "blur(12px)",
+        boxShadow:
+          "0 0 40px -14px rgba(94,228,255,0.35), 0 20px 50px -30px rgba(0,0,0,0.9)",
         zIndex: 9999,
       }}
     >
       <h2
         style={{
           marginBottom: "12px",
+          letterSpacing: "0.05em",
+          textShadow:
+            "0 0 14px rgba(94,228,255,0.3)",
         }}
       >
         {current.title}
       </h2>
 
-      <p>{current.description}</p>
+      <p
+        style={{
+          opacity: 0.8,
+          lineHeight: 1.65,
+          fontSize: "14px",
+        }}
+      >
+        {current.description}
+      </p>
 
       <a
         href={actionLink}
@@ -86,11 +100,14 @@ export default function DestinationPanel() {
           display: "inline-block",
           marginTop: "16px",
           padding: "10px 16px",
-          background: "#ffffff",
-          color: "#000000",
+          background: "rgba(94,228,255,0.08)",
+          border: "1px solid rgba(94,228,255,0.4)",
+          color: "#c8f4ff",
           borderRadius: "8px",
           textDecoration: "none",
           fontWeight: 600,
+          fontSize: "14px",
+          letterSpacing: "0.03em",
         }}
       >
         {actionText}
@@ -103,7 +120,17 @@ export default function DestinationPanel() {
         <>
           {selectedDestination === "career" && (
             <div style={{ marginTop: "24px" }}>
-              <h3>Skills</h3>
+              <h3
+                style={{
+                  fontSize: "12px",
+                  letterSpacing: "0.22em",
+                  textTransform: "uppercase",
+                  color: "#9adfee",
+                  opacity: 0.85,
+                }}
+              >
+                Skills
+              </h3>
 
               <div
                 style={{
@@ -119,9 +146,12 @@ export default function DestinationPanel() {
                     style={{
                       padding: "6px 10px",
                       border:
-                        "1px solid rgba(255,255,255,0.2)",
+                        "1px solid rgba(94,228,255,0.3)",
+                      background:
+                        "rgba(94,228,255,0.06)",
                       borderRadius: "999px",
                       fontSize: "12px",
+                      color: "rgba(255,255,255,0.88)",
                     }}
                   >
                     {skill}
@@ -141,13 +171,17 @@ export default function DestinationPanel() {
               style={{
                 marginTop: "18px",
                 marginBottom: "24px",
-                padding: "10px 16px",
-                background: "#66e0ff",
-                color: "#000",
+                padding: "11px 18px",
+                background:
+                  "linear-gradient(160deg, #7de8ff, #4cc2ea)",
+                color: "#04121e",
                 border: "none",
                 borderRadius: "8px",
                 fontWeight: 600,
+                letterSpacing: "0.04em",
                 cursor: "pointer",
+                boxShadow:
+                  "0 0 26px -8px #66e0ff",
               }}
             >
               Enter Dimension

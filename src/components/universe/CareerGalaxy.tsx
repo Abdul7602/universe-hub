@@ -125,8 +125,12 @@ export default function CareerGalaxy() {
   const selectedDestination = useNavigationStore(
     (state) => state.selectedDestination
   );
+  const hoveredDestination = useNavigationStore(
+    (state) => state.hoveredDestination
+  );
 
   const isSelected = selectedDestination === "career";
+  const isHovered = hoveredDestination === "career";
   const materialRef = useRef<THREE.MeshStandardMaterial>(null);
   const spinRef = useRef<THREE.Group>(null);
   const galaxyMaterialRef = useRef<THREE.ShaderMaterial>(null);
@@ -150,7 +154,7 @@ export default function CareerGalaxy() {
     const t = clock.elapsedTime;
 
     // Eased emissive ramp toward the selection state (visual only)
-    const target = isSelected ? 3 : 1;
+    const target = isSelected ? 3 : isHovered ? 1.7 : 1;
     emissiveLevel.current +=
       (target - emissiveLevel.current) * Math.min(delta * 4, 1);
 
