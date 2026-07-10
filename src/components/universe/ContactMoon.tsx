@@ -35,17 +35,17 @@ export default function ContactMoon() {
   const emissiveLevel = useRef(0.25);
 
   const surface = useMemo(
-    () => getCrateredSurface("contact-moon", "#c9b090", 17, 110),
+    () => getCrateredSurface("contact-moon", "#a8a49c", 17, 150),
     []
   );
 
   const rimMaterial = useMemo(
     () =>
       createFresnelMaterial({
-        color: "#ffcf88",
-        power: 3,
-        intensity: 1.6,
-        opacity: 0.5,
+        color: "#f2d6a0",
+        power: 3.2,
+        intensity: 1.4,
+        opacity: 0.42,
       }),
     []
   );
@@ -62,8 +62,8 @@ export default function ContactMoon() {
         emissiveLevel.current + Math.sin(t * 0.3) * 0.05;
     }
 
-    // Quiet, slow lunar rotation
-    if (moonRef.current) moonRef.current.rotation.y = t * 0.02;
+    // Quiet, slow lunar rotation about a gently tilted axis
+    if (moonRef.current) moonRef.current.rotation.y = t * 0.015;
 
     rimMaterial.uniforms.uIntensity.value =
       1.6 + Math.sin(t * 0.4 + 2.5) * 0.25;
@@ -93,6 +93,7 @@ export default function ContactMoon() {
       {/* Moon body — cratered surface, handlers unchanged */}
       <mesh
         ref={moonRef}
+        rotation={[0.06, 0, 0.18]}
         onPointerOver={() => setHoveredDestination("contact")}
         onPointerOut={() => setHoveredDestination(null)}
         onClick={() => {
@@ -105,12 +106,12 @@ export default function ContactMoon() {
           ref={materialRef}
           map={surface.map}
           bumpMap={surface.bumpMap}
-          bumpScale={0.04}
-          color="#e8d4b0"
-          emissive="#ffd080"
+          bumpScale={0.05}
+          color="#d2cec6"
+          emissive="#d8c8a8"
           emissiveIntensity={isSelected ? 1.2 : 0.25}
           metalness={0}
-          roughness={0.92}
+          roughness={0.97}
         />
       </mesh>
 

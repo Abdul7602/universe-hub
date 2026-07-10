@@ -167,16 +167,20 @@ export function getCrateredSurface(
   cctx.fillStyle = baseColor;
   cctx.fillRect(0, 0, size, size);
 
-  // Large soft tonal patches (maria)
-  for (let i = 0; i < 14; i++) {
+  // Large soft tonal patches (maria) — a few big dark basins plus
+  // lighter highland washes, like the real lunar nearside
+  for (let i = 0; i < 16; i++) {
     const x = rand() * size;
     const y = rand() * size;
-    const r = size * (0.08 + rand() * 0.18);
-    const dark = rand() > 0.4;
+    const big = i < 5;
+    const r = size * (big ? 0.14 + rand() * 0.16 : 0.05 + rand() * 0.1);
+    const dark = big || rand() > 0.45;
     const g = cctx.createRadialGradient(x, y, 0, x, y, r);
     g.addColorStop(
       0,
-      dark ? "rgba(0,0,0,0.10)" : "rgba(255,255,255,0.05)"
+      dark
+        ? `rgba(0,0,0,${big ? 0.16 : 0.09})`
+        : "rgba(255,255,255,0.05)"
     );
     g.addColorStop(1, "rgba(0,0,0,0)");
     cctx.fillStyle = g;
@@ -194,7 +198,9 @@ export function getCrateredSurface(
   for (let i = 0; i < craterCount; i++) {
     const x = rand() * size;
     const y = rand() * size;
-    const r = size * (0.006 + rand() * 0.03);
+    // Power-law size distribution: many small craters, few large ones
+    const t = rand();
+    const r = size * (0.004 + t * t * 0.042);
 
     // Depression
     const pit = bctx.createRadialGradient(x, y, 0, x, y, r);
@@ -218,6 +224,26 @@ export function getCrateredSurface(
     shade.addColorStop(1, "rgba(0,0,0,0)");
     cctx.fillStyle = shade;
     cctx.fillRect(x - r, y - r, r * 2, r * 2);
+  }
+
+  // Fine regolith grain — tiny specks breaking up smooth shading
+  for (let i = 0; i < 500; i++) {
+    const x = rand() * size;
+    const y = rand() * size;
+    const s = 0.6 + rand() * 1.4;
+    const light = rand() > 0.5;
+
+    bctx.fillStyle = light
+      ? `rgba(165,165,165,${0.1 + rand() * 0.15})`
+      : `rgba(95,95,95,${0.1 + rand() * 0.15})`;
+    bctx.fillRect(x, y, s, s);
+
+    if (i % 2 === 0) {
+      cctx.fillStyle = light
+        ? `rgba(255,255,255,${0.02 + rand() * 0.03})`
+        : `rgba(0,0,0,${0.02 + rand() * 0.04})`;
+      cctx.fillRect(x, y, s, s);
+    }
   }
 
   const map = new THREE.CanvasTexture(colorCanvas);
