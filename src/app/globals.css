@@ -62,3 +62,17 @@ main {
 *::-webkit-scrollbar-thumb:hover {
   background: rgba(130, 190, 225, 0.4);
 }
+
+/* Unified interaction feedback — every button and CTA in the project
+   gets the same fast, subtle press response and a visible focus ring */
+button:active,
+a[href]:active {
+  transform: translateY(0) scale(0.98) !important;
+  transition-duration: 0.08s !important;
+}
+
+button:focus-visible,
+a[href]:focus-visible {
+  outline: 1px solid rgba(94, 228, 255, 0.65);
+  outline-offset: 2px;
+}
