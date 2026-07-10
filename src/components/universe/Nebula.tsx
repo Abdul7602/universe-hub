@@ -85,7 +85,7 @@ type CloudLayer = {
  */
 const CLOUD_LAYERS: CloudLayer[] = [
   // Left violet cluster
-  { position: [-12, 4, -20], scale: 15, color: "#6a44c8", opacity: 0.2, spin: 0.4, phase: 0.0 },
+  { position: [-12, 4, -20], scale: 15, color: "#6a44c8", opacity: 0.18, spin: 0.4, phase: 0.0 },
   { position: [-10, 2, -19], scale: 10, color: "#2ab4d8", opacity: 0.13, spin: 2.1, phase: 1.3 },
   { position: [-14, 6.5, -22], scale: 9, color: "#a05fe8", opacity: 0.11, spin: 4.4, phase: 2.6 },
 
@@ -103,8 +103,8 @@ const CLOUD_LAYERS: CloudLayer[] = [
   { position: [3, -8.5, -24], scale: 10, color: "#3a2a80", opacity: 0.09, spin: 1.9, phase: 2.9 },
 
   // Deep background washes — huge, dim, almost static
-  { position: [0, 0, -32], scale: 30, color: "#251a55", opacity: 0.09, spin: 0.0, phase: 5.0 },
-  { position: [5, 3, -30], scale: 22, color: "#152a58", opacity: 0.07, spin: 3.1, phase: 3.8 },
+  { position: [0, 0, -32], scale: 30, color: "#251a55", opacity: 0.11, spin: 0.0, phase: 5.0 },
+  { position: [5, 3, -30], scale: 22, color: "#152a58", opacity: 0.09, spin: 3.1, phase: 3.8 },
 ];
 
 const DRIFT_AMPLITUDE = 0.45;

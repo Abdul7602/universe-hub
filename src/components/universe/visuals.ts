@@ -433,3 +433,232 @@ export function getQualityTier(): QualityTier {
   cachedTier = cores <= 4 || memory <= 4 ? "low" : "high";
   return cachedTier;
 }
+
+/* ------------------------------------------------------------------ */
+/* Lunar surface — stylized believable moon                            */
+/* ------------------------------------------------------------------ */
+
+export type LunarSurface = {
+  map: THREE.CanvasTexture;
+  bumpMap: THREE.CanvasTexture;
+  roughnessMap: THREE.CanvasTexture;
+};
+
+const lunarCache = new Map<string, LunarSurface>();
+
+/**
+ * Stylized nearside-Moon surface, generated once. Rotation reads
+ * because of asymmetry: maria clustered on one hemisphere, a denser
+ * southern crater band, and bright rayed landmark craters.
+ * Returns color + bump + roughness maps (canvas only, no shaders).
+ */
+export function getLunarSurface(key: string, seed = 47): LunarSurface {
+  const cached = lunarCache.get(key);
+  if (cached) return cached;
+
+  const size = 1024;
+  const rand = createSeededRandom(seed);
+
+  const colorCanvas = document.createElement("canvas");
+  colorCanvas.width = size;
+  colorCanvas.height = size;
+  const cctx = colorCanvas.getContext("2d")!;
+
+  const bumpCanvas = document.createElement("canvas");
+  bumpCanvas.width = size;
+  bumpCanvas.height = size;
+  const bctx = bumpCanvas.getContext("2d")!;
+
+  const roughCanvas = document.createElement("canvas");
+  roughCanvas.width = size;
+  roughCanvas.height = size;
+  const rctx = roughCanvas.getContext("2d")!;
+
+  // Base: bright silver-gray highlands, fully rough
+  cctx.fillStyle = "#c2c5cb";
+  cctx.fillRect(0, 0, size, size);
+  bctx.fillStyle = "#808080";
+  bctx.fillRect(0, 0, size, size);
+  rctx.fillStyle = "#f2f2f2";
+  rctx.fillRect(0, 0, size, size);
+
+  // Highland mottle
+  for (let i = 0; i < 40; i++) {
+    const x = rand() * size;
+    const y = rand() * size;
+    const r = size * (0.03 + rand() * 0.09);
+    const light = rand() > 0.5;
+    const g = cctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(
+      0,
+      light
+        ? `rgba(255,255,255,${0.04 + rand() * 0.05})`
+        : `rgba(30,38,52,${0.04 + rand() * 0.05})`
+    );
+    g.addColorStop(1, "rgba(0,0,0,0)");
+    cctx.fillStyle = g;
+    cctx.fillRect(0, 0, size, size);
+  }
+
+  // Maria clustered on one hemisphere — the key rotation landmark
+  const mariaCenters = [
+    { u: 0.16, v: 0.34, r: 0.11 },
+    { u: 0.27, v: 0.28, r: 0.13 },
+    { u: 0.38, v: 0.38, r: 0.1 },
+    { u: 0.22, v: 0.5, r: 0.09 },
+    { u: 0.44, v: 0.52, r: 0.07 },
+    { u: 0.12, v: 0.6, r: 0.06 },
+  ];
+
+  for (const mare of mariaCenters) {
+    const blobCount = 4 + Math.floor(rand() * 3);
+    for (let b = 0; b < blobCount; b++) {
+      const x = (mare.u + (rand() - 0.5) * mare.r * 0.9) * size;
+      const y = (mare.v + (rand() - 0.5) * mare.r * 0.9) * size;
+      const r = size * mare.r * (0.5 + rand() * 0.55);
+
+      const g = cctx.createRadialGradient(x, y, 0, x, y, r);
+      g.addColorStop(0, "rgba(62,72,88,0.28)");
+      g.addColorStop(0.7, "rgba(62,72,88,0.14)");
+      g.addColorStop(1, "rgba(62,72,88,0)");
+      cctx.fillStyle = g;
+      cctx.fillRect(0, 0, size, size);
+
+      const bg = bctx.createRadialGradient(x, y, 0, x, y, r);
+      bg.addColorStop(0, "rgba(105,105,105,0.5)");
+      bg.addColorStop(1, "rgba(128,128,128,0)");
+      bctx.fillStyle = bg;
+      bctx.fillRect(0, 0, size, size);
+
+      const rg = rctx.createRadialGradient(x, y, 0, x, y, r);
+      rg.addColorStop(0, "rgba(205,205,205,0.5)");
+      rg.addColorStop(1, "rgba(242,242,242,0)");
+      rctx.fillStyle = rg;
+      rctx.fillRect(0, 0, size, size);
+    }
+  }
+
+  // Craters — power-law sizes; denser southern band
+  for (let i = 0; i < 380; i++) {
+    const x = rand() * size;
+    const southern = i >= 220;
+    const y = southern
+      ? (0.58 + rand() * 0.38) * size
+      : rand() * size;
+    const t = rand();
+    const r =
+      size * (0.003 + t * t * (southern ? 0.02 : 0.035));
+
+    const pit = bctx.createRadialGradient(x, y, 0, x, y, r);
+    pit.addColorStop(0, "rgba(42,42,42,0.8)");
+    pit.addColorStop(0.72, "rgba(84,84,84,0.4)");
+    pit.addColorStop(1, "rgba(128,128,128,0)");
+    bctx.fillStyle = pit;
+    bctx.fillRect(x - r, y - r, r * 2, r * 2);
+
+    const rim = bctx.createRadialGradient(x, y, r * 0.78, x, y, r * 1.18);
+    rim.addColorStop(0, "rgba(205,205,205,0)");
+    rim.addColorStop(0.5, "rgba(212,212,212,0.55)");
+    rim.addColorStop(1, "rgba(128,128,128,0)");
+    bctx.fillStyle = rim;
+    bctx.fillRect(x - r * 1.3, y - r * 1.3, r * 2.6, r * 2.6);
+
+    const shade = cctx.createRadialGradient(x, y, 0, x, y, r);
+    shade.addColorStop(0, "rgba(10,10,14,0.16)");
+    shade.addColorStop(1, "rgba(0,0,0,0)");
+    cctx.fillStyle = shade;
+    cctx.fillRect(x - r, y - r, r * 2, r * 2);
+
+    if (r > size * 0.014) {
+      const crim = cctx.createRadialGradient(
+        x, y, r * 0.8, x, y, r * 1.12
+      );
+      crim.addColorStop(0, "rgba(255,255,255,0)");
+      crim.addColorStop(0.5, "rgba(255,252,244,0.14)");
+      crim.addColorStop(1, "rgba(255,255,255,0)");
+      cctx.fillStyle = crim;
+      cctx.fillRect(x - r * 1.25, y - r * 1.25, r * 2.5, r * 2.5);
+    }
+  }
+
+  // Bright rayed landmark craters
+  const rayed = [
+    { u: 0.62, v: 0.78, r: 0.024, rays: 13 },
+    { u: 0.82, v: 0.3, r: 0.015, rays: 9 },
+  ];
+
+  for (const c of rayed) {
+    const x = c.u * size;
+    const y = c.v * size;
+    const r = c.r * size;
+
+    for (let i = 0; i < c.rays; i++) {
+      const angle = (i / c.rays) * Math.PI * 2 + rand() * 0.5;
+      const len = r * (5 + rand() * 7);
+      const grad = cctx.createLinearGradient(
+        x, y,
+        x + Math.cos(angle) * len,
+        y + Math.sin(angle) * len
+      );
+      grad.addColorStop(0, "rgba(246,250,255,0.2)");
+      grad.addColorStop(1, "rgba(246,250,255,0)");
+      cctx.strokeStyle = grad;
+      cctx.lineWidth = 1.5 + rand() * 2;
+      cctx.beginPath();
+      cctx.moveTo(x, y);
+      cctx.lineTo(
+        x + Math.cos(angle) * len,
+        y + Math.sin(angle) * len
+      );
+      cctx.stroke();
+    }
+
+    const halo = cctx.createRadialGradient(x, y, 0, x, y, r * 2.6);
+    halo.addColorStop(0, "rgba(246,250,255,0.34)");
+    halo.addColorStop(1, "rgba(246,250,255,0)");
+    cctx.fillStyle = halo;
+    cctx.fillRect(x - r * 2.6, y - r * 2.6, r * 5.2, r * 5.2);
+
+    const pit = bctx.createRadialGradient(x, y, 0, x, y, r);
+    pit.addColorStop(0, "rgba(36,36,36,0.85)");
+    pit.addColorStop(0.7, "rgba(90,90,90,0.4)");
+    pit.addColorStop(1, "rgba(128,128,128,0)");
+    bctx.fillStyle = pit;
+    bctx.fillRect(x - r, y - r, r * 2, r * 2);
+
+    const rg = rctx.createRadialGradient(x, y, 0, x, y, r * 2.4);
+    rg.addColorStop(0, "rgba(255,255,255,0.4)");
+    rg.addColorStop(1, "rgba(242,242,242,0)");
+    rctx.fillStyle = rg;
+    rctx.fillRect(x - r * 2.4, y - r * 2.4, r * 4.8, r * 4.8);
+  }
+
+  // Fine regolith grain
+  for (let i = 0; i < 900; i++) {
+    const x = rand() * size;
+    const y = rand() * size;
+    const s = 0.7 + rand() * 1.6;
+    const light = rand() > 0.5;
+
+    bctx.fillStyle = light
+      ? `rgba(168,168,168,${0.1 + rand() * 0.14})`
+      : `rgba(92,92,92,${0.1 + rand() * 0.14})`;
+    bctx.fillRect(x, y, s, s);
+
+    if (i % 2 === 0) {
+      cctx.fillStyle = light
+        ? `rgba(255,255,255,${0.02 + rand() * 0.03})`
+        : `rgba(0,0,0,${0.02 + rand() * 0.04})`;
+      cctx.fillRect(x, y, s, s);
+    }
+  }
+
+  const map = new THREE.CanvasTexture(colorCanvas);
+  map.colorSpace = THREE.SRGBColorSpace;
+  const bumpMap = new THREE.CanvasTexture(bumpCanvas);
+  const roughnessMap = new THREE.CanvasTexture(roughCanvas);
+
+  const result = { map, bumpMap, roughnessMap };
+  lunarCache.set(key, result);
+  return result;
+}

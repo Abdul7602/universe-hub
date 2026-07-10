@@ -5,7 +5,7 @@ import { useFrame } from "@react-three/fiber";
 import { useNavigationStore } from "@/stores/navigationStore";
 import * as THREE from "three";
 import DestinationLabel from "./DestinationLabel";
-import { createFresnelMaterial, getCrateredSurface } from "./visuals";
+import { createFresnelMaterial, getLunarSurface } from "./visuals";
 
 function disableRaycast(object: THREE.Object3D | null) {
   if (object) object.raycast = () => {};
@@ -31,20 +31,23 @@ export default function ContactMoon() {
   const isSelected = selectedDestination === "contact";
   const isHovered = hoveredDestination === "contact";
   const materialRef = useRef<THREE.MeshStandardMaterial>(null);
+  const moonRef = useRef<THREE.Mesh>(null);
   const emissiveLevel = useRef(0.25);
 
   const surface = useMemo(
-    () => getCrateredSurface("contact-moon", "#c9b090", 17, 110),
+    () => getLunarSurface("contact-moon"),
     []
   );
 
+  // Warm-neutral rim: gray moon body, but the rim ties it to the
+  // scene's warm sun key light so it belongs to the same universe
   const rimMaterial = useMemo(
     () =>
       createFresnelMaterial({
-        color: "#ffcf88",
-        power: 3,
-        intensity: 1.6,
-        opacity: 0.5,
+        color: "#f5ddb0",
+        power: 3.2,
+        intensity: 1.45,
+        opacity: 0.45,
       }),
     []
   );
@@ -61,8 +64,12 @@ export default function ContactMoon() {
         emissiveLevel.current + Math.sin(t * 0.3) * 0.05;
     }
 
+    // Slow axial rotation around the moon's own tilted vertical
+    // axis — one revolution every ~2.5 minutes, stationary in space
+    if (moonRef.current) moonRef.current.rotation.y = t * 0.04;
+
     rimMaterial.uniforms.uIntensity.value =
-      1.6 + Math.sin(t * 0.4 + 2.5) * 0.25;
+      1.45 + Math.sin(t * 0.4 + 2.5) * 0.22;
   });
 
   return (
@@ -75,10 +82,10 @@ export default function ContactMoon() {
         intensity={0.35}
         distance={6}
         decay={2}
-        color="#ffd8a0"
+        color="#f2ddb8"
       />
 
-      {/* Warm fresnel rim glow */}
+      {/* Warm-neutral fresnel rim glow */}
       <mesh
         ref={(el) => disableRaycast(el)}
         material={rimMaterial}
@@ -86,8 +93,10 @@ export default function ContactMoon() {
         <sphereGeometry args={[0.735, 48, 48]} />
       </mesh>
 
-      {/* Moon body — cratered surface, static (no axial rotation) */}
+      {/* Moon body — lunar surface, handlers unchanged */}
       <mesh
+        ref={moonRef}
+        rotation={[0.06, 0, 0.18]}
         onPointerOver={() => setHoveredDestination("contact")}
         onPointerOut={() => setHoveredDestination(null)}
         onClick={() => {
@@ -100,12 +109,13 @@ export default function ContactMoon() {
           ref={materialRef}
           map={surface.map}
           bumpMap={surface.bumpMap}
-          bumpScale={0.04}
-          color="#e8d4b0"
-          emissive="#ffd080"
+          bumpScale={0.055}
+          roughnessMap={surface.roughnessMap}
+          color="#dfe2e8"
+          emissive="#d8ccb4"
           emissiveIntensity={isSelected ? 1.2 : 0.25}
           metalness={0}
-          roughness={0.92}
+          roughness={1}
         />
       </mesh>
 

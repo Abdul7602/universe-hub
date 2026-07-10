@@ -48,14 +48,14 @@ export default function Portal({ position }: PortalProps) {
     if (ringRef.current) {
       ringRef.current.rotation.z += 0.01;
       const mat = ringRef.current.material as THREE.MeshStandardMaterial;
-      mat.emissiveIntensity = 2.2 + Math.sin(t * 1.6) * 0.7;
+      mat.emissiveIntensity = 2.0 + Math.sin(t * 1.6) * 0.55;
     }
 
     if (innerRingRef.current) {
       innerRingRef.current.rotation.z -= 0.007;
       const mat = innerRingRef.current
         .material as THREE.MeshStandardMaterial;
-      mat.emissiveIntensity = 4 + Math.sin(t * 2.1 + 0.8) * 1.2;
+      mat.emissiveIntensity = 3.6 + Math.sin(t * 2.1 + 0.8) * 0.9;
       const pulse = 1 + Math.sin(t * 1.3) * 0.04;
       innerRingRef.current.scale.set(pulse, pulse, pulse);
     }

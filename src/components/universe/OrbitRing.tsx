@@ -30,8 +30,8 @@ export default function OrbitRing() {
     const t = clock.elapsedTime;
 
     // Gentle breathing — slower than before, no strobing
-    const pulse = 0.3 + Math.sin(t * 0.7) * 0.08;
-    const ghostPulse = 0.12 + Math.sin(t * 0.9 + 1.2) * 0.04;
+    const pulse = 0.34 + Math.sin(t * 0.7) * 0.07;
+    const ghostPulse = 0.09 + Math.sin(t * 0.9 + 1.2) * 0.03;
 
     if (primaryRef.current) primaryRef.current.opacity = pulse;
     if (ghostRef.current) ghostRef.current.opacity = ghostPulse;
@@ -106,7 +106,7 @@ export default function OrbitRing() {
         <meshBasicMaterial
           color="#c8f8ff"
           transparent
-          opacity={0.5}
+          opacity={0.55}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
         />

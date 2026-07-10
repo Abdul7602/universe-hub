@@ -46,7 +46,7 @@ export default function Eclipse() {
       createFresnelMaterial({
         color: "#ffd894",
         power: 3.5,
-        intensity: 2.2,
+        intensity: 2.4,
         opacity: 0.85,
       }),
     []
@@ -75,7 +75,7 @@ export default function Eclipse() {
       const rimPulse = 1 + Math.sin(t * 1.4) * 0.012;
       rimRef.current.scale.set(rimPulse, rimPulse, rimPulse);
       rimMaterial.uniforms.uIntensity.value =
-        2.2 + Math.sin(t * 0.7) * 0.35;
+        2.4 + Math.sin(t * 0.7) * 0.35;
     }
   });
 

@@ -30,7 +30,7 @@ const heroVertexShader = /* glsl */ `
 
     // Slow desynchronized twinkle, 0.1–0.4 Hz range
     float twinkle = sin(uTime * (0.6 + aPhase * 1.8) + aPhase * 6.2831);
-    vAlpha = 0.45 + 0.4 * twinkle;
+    vAlpha = 0.4 + 0.32 * twinkle;
 
     gl_PointSize = aSize * (140.0 / -mvPosition.z);
     gl_Position = projectionMatrix * mvPosition;
