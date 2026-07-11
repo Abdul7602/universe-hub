@@ -161,7 +161,7 @@ export default function CareerDimension() {
       <div
         style={{
           maxWidth: "1200px",
-          margin: "120px auto",
+          margin: "50px auto",
           padding: "40px",
           position: "relative",
         }}

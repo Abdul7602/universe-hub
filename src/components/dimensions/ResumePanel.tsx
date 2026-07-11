@@ -8,17 +8,9 @@ const sectionHeader: React.CSSProperties = {
   letterSpacing: "0.25em",
   textTransform: "uppercase",
   color: "#9ad4ee",
-  opacity: 0.85,
+  opacity: 0.8,
   fontFamily:
     "ui-monospace, SFMono-Regular, Menlo, monospace",
-};
-
-const cornerBase: React.CSSProperties = {
-  position: "absolute",
-  width: "12px",
-  height: "12px",
-  borderColor: "rgba(102,224,255,0.7)",
-  borderStyle: "solid",
 };
 
 export default function ResumePanel() {
@@ -26,48 +18,84 @@ export default function ResumePanel() {
     <>
       <style>
         {`
-          .cxr-cta {
-            transition: box-shadow 0.3s ease, transform 0.3s ease;
+          .cxr-panel {
+            transition:
+              transform .35s ease,
+              box-shadow .35s ease,
+              border-color .35s ease;
           }
 
-          .cxr-cta:hover {
+          .cxr-panel:hover {
             transform: translateY(-2px);
-            box-shadow: 0 0 30px -6px #66e0ff;
+            border-color: rgba(102,224,255,.18);
+            box-shadow:
+              inset 0 0 60px rgba(102,224,255,.07),
+              0 0 90px rgba(102,224,255,.12);
+          }
+
+          .cxr-button {
+            transition:
+              transform .25s ease,
+              background .25s ease,
+              border-color .25s ease,
+              box-shadow .25s ease;
+          }
+
+          .cxr-button:hover {
+            transform: translateY(-2px);
+            background: rgba(102,224,255,.18);
+            border-color: rgba(102,224,255,.55);
+            box-shadow: 0 0 26px rgba(102,224,255,.22);
           }
         `}
       </style>
 
       <div
+        className="cxr-panel"
         style={{
           position: "relative",
-          marginTop: "32px",
-          padding: "32px",
-          border:
-            "1px solid rgba(102,224,255,0.22)",
-          borderRadius: "10px",
+
+          marginTop: "36px",
+
+          maxWidth: "560px",
+
+          marginLeft: "auto",
+          marginRight: "auto",
+
+          padding: "38px",
+
+          borderRadius: "18px",
+
+          overflow: "hidden",
+
           background:
-            "linear-gradient(170deg, rgba(6,14,28,0.8), rgba(3,8,18,0.85))",
-          backdropFilter: "blur(8px)",
+            "linear-gradient(180deg, rgba(18,35,58,.22), rgba(6,15,30,.10))",
+
+          backdropFilter: "blur(16px)",
+
+          border:
+            "1px solid rgba(102,224,255,.08)",
+
           boxShadow:
-            "0 0 40px -14px rgba(102,224,255,0.35), 0 20px 50px -30px rgba(0,0,0,0.9)",
+            `
+            inset 0 0 60px rgba(102,224,255,.05),
+            0 0 70px rgba(102,224,255,.08)
+            `,
         }}
       >
-        {/* Corner brackets */}
-        <span style={{ ...cornerBase, top: -1, left: -1, borderWidth: "1px 0 0 1px" }} />
-        <span style={{ ...cornerBase, top: -1, right: -1, borderWidth: "1px 1px 0 0" }} />
-        <span style={{ ...cornerBase, bottom: -1, left: -1, borderWidth: "0 0 1px 1px" }} />
-        <span style={{ ...cornerBase, bottom: -1, right: -1, borderWidth: "0 1px 1px 0" }} />
+        {/* holographic scan texture */}
 
-        {/* Top edge beam */}
         <div
           style={{
             position: "absolute",
-            top: 0,
-            left: "10%",
-            right: "10%",
-            height: "1px",
+            inset: 0,
+
+            pointerEvents: "none",
+
             background:
-              "linear-gradient(90deg, transparent, rgba(102,224,255,0.8), transparent)",
+              "repeating-linear-gradient(180deg, rgba(102,224,255,.018) 0px, rgba(102,224,255,.018) 1px, transparent 2px, transparent 6px)",
+
+            opacity: .45,
           }}
         />
 
@@ -78,9 +106,11 @@ export default function ResumePanel() {
         <h2
           style={{
             marginBottom: "6px",
-            letterSpacing: "0.04em",
+
+            letterSpacing: ".05em",
+
             textShadow:
-              "0 0 16px rgba(102,224,255,0.35)",
+              "0 0 10px rgba(102,224,255,.18)",
           }}
         >
           {careerResume.personal.name}
@@ -88,8 +118,10 @@ export default function ResumePanel() {
 
         <p
           style={{
-            opacity: 0.7,
-            marginBottom: "28px",
+            opacity: .72,
+
+            marginBottom: "30px",
+
             color: "#bfe6f5",
           }}
         >
@@ -100,98 +132,123 @@ export default function ResumePanel() {
           Education
         </h3>
 
-        {careerResume.education.map(
-          (item) => (
+        {careerResume.education.map((item) => (
+          <div
+            key={item.institution}
+            style={{
+              marginBottom: "18px",
+
+              paddingLeft: "16px",
+
+              borderLeft:
+                "2px solid rgba(102,224,255,.18)",
+            }}
+          >
+            <strong>
+              {item.degree}
+            </strong>
+
             <div
-              key={
-                item.institution
-              }
               style={{
-                marginBottom: "16px",
-                paddingLeft: "14px",
-                borderLeft:
-                  "2px solid rgba(102,224,255,0.35)",
+                opacity: .85,
               }}
             >
-              <strong>
-                {item.degree}
-              </strong>
-
-              <div style={{ opacity: 0.85 }}>
-                {item.institution}
-              </div>
-
-              <small style={{ opacity: 0.55 }}>
-                {item.period}
-              </small>
+              {item.institution}
             </div>
-          )
-        )}
+
+            <small
+              style={{
+                opacity: .55,
+              }}
+            >
+              {item.period}
+            </small>
+          </div>
+        ))}
 
         <h3
           style={{
             ...sectionHeader,
-            marginTop: "26px",
+
+            marginTop: "28px",
           }}
         >
           Experience
         </h3>
 
-        {careerResume.experience.map(
-          (item) => (
+        {careerResume.experience.map((item) => (
+          <div
+            key={item.company}
+            style={{
+              marginBottom: "22px",
+
+              paddingLeft: "16px",
+
+              borderLeft:
+                "2px solid rgba(102,224,255,.18)",
+            }}
+          >
+            <strong>
+              {item.role}
+            </strong>
+
             <div
-              key={item.company}
               style={{
-                marginBottom: "20px",
-                paddingLeft: "14px",
-                borderLeft:
-                  "2px solid rgba(102,224,255,0.35)",
+                opacity: .85,
               }}
             >
-              <strong>
-                {item.role}
-              </strong>
-
-              <div style={{ opacity: 0.85 }}>
-                {item.company}
-              </div>
-
-              <small style={{ opacity: 0.55 }}>
-                {item.period}
-              </small>
-
-              <p
-                style={{
-                  marginTop: "8px",
-                  opacity: 0.8,
-                  lineHeight: 1.6,
-                }}
-              >
-                {item.description}
-              </p>
+              {item.company}
             </div>
-          )
-        )}
+
+            <small
+              style={{
+                opacity: .55,
+              }}
+            >
+              {item.period}
+            </small>
+
+            <p
+              style={{
+                marginTop: "8px",
+
+                opacity: .78,
+
+                lineHeight: 1.65,
+              }}
+            >
+              {item.description}
+            </p>
+          </div>
+        ))}
 
         <a
-          className="cxr-cta"
-          href={
-            careerResume.resumeUrl
-          }
+          className="cxr-button"
+          href={careerResume.resumeUrl}
           target="_blank"
           rel="noreferrer"
           style={{
             display: "inline-block",
+
             marginTop: "24px",
-            padding: "10px 16px",
-            background:
-              "#66e0ff",
-            color: "#000",
-            borderRadius: "8px",
+
+            padding: "11px 18px",
+
+            borderRadius: "10px",
+
             textDecoration: "none",
+
             fontWeight: 600,
-            boxShadow:
-              "0 0 24px -8px #66e0ff",
+
+            background:
+              "rgba(102,224,255,.12)",
+
+            color: "#d6f6ff",
+
+            border:
+              "1px solid rgba(102,224,255,.35)",
+
+            backdropFilter: "blur(8px)",
           }}
         >
           Download Resume

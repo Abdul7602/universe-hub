@@ -196,6 +196,7 @@ export default function GithubDimension() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
+          transform: "translateY(50px)",
         }}
       >
         <h1
