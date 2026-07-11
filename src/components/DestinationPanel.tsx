@@ -96,10 +96,10 @@ export default function DestinationPanel() {
             border-style: solid;
           }
 
-          .dp-corner.tl { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
-          .dp-corner.tr { top: -1px; right: -1px; border-width: 1px 1px 0 0; }
-          .dp-corner.bl { bottom: -1px; left: -1px; border-width: 0 0 1px 1px; }
-          .dp-corner.br { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+          .dp-corner.tl { top: 0; left: 0; border-width: 1px 0 0 1px; }
+          .dp-corner.tr { top: 0; right: 0; border-width: 1px 1px 0 0; }
+          .dp-corner.bl { bottom: 0; left: 0; border-width: 0 0 1px 1px; }
+          .dp-corner.br { bottom: 0; right: 0; border-width: 0 1px 1px 0; }
 
           @media (prefers-reduced-motion: reduce) {
             .dp-panel { animation: none; }

@@ -84,10 +84,10 @@ export default function MemoryModal() {
             opacity: 0.9;
           }
 
-          .cxm-corner.tl { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
-          .cxm-corner.tr { top: -1px; right: -1px; border-width: 1px 1px 0 0; }
-          .cxm-corner.bl { bottom: -1px; left: -1px; border-width: 0 0 1px 1px; }
-          .cxm-corner.br { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+          .cxm-corner.tl { top: 0; left: 0; border-width: 1px 0 0 1px; }
+          .cxm-corner.tr { top: 0; right: 0; border-width: 1px 1px 0 0; }
+          .cxm-corner.bl { bottom: 0; left: 0; border-width: 0 0 1px 1px; }
+          .cxm-corner.br { bottom: 0; right: 0; border-width: 0 1px 1px 0; }
 
           @media (prefers-reduced-motion: reduce) {
             .cxm-panel { animation: none !important; }
