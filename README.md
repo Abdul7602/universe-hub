@@ -3,7 +3,7 @@
 An interactive 3D portfolio built as a small explorable universe. Instead of traditional pages, professional content is presented as celestial destinations — a career galaxy, a projects planet, a GitHub station, and a contact moon — rendered in real time with Three.js and React Three Fiber.
 
 <p align="center">
-  <a href="https://universe-hub-five.vercel.app/" target="_blank">
+  <a href="https://universe-hub-lime.vercel.app/" target="_blank">
     <img src="https://img.shields.io/badge/Live-Demo-000000?style=for-the-badge&logo=vercel&logoColor=white" />
   </a>
 </p>
