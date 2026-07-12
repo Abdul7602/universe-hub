@@ -41,7 +41,8 @@ An interactive 3D portfolio built as a small explorable universe. Instead of tra
 
 ## Screenshots
 
-> _Screenshots coming soon._
+<img width="2870" height="1442" alt="image" src="https://github.com/user-attachments/assets/00bba1ae-d6e9-4f6c-9ebd-5d20fabfe488" />
+
 
 | Universe Hub | GitHub Dimension |
 | --- | --- |
